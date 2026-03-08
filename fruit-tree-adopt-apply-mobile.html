@@ -164,12 +164,21 @@
     }
     .link-note { margin-top: 14px; text-align: center; font-size: 12px; color: var(--grey); }
     .link-note a { color: var(--primary-deep); text-decoration: none; }
+    .overlay { display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+    .overlay.show { display: flex; }
+    .modal { width: 100%; max-width: 320px; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); text-align: center; padding: 24px; }
+    .modal .icon-ok { width: 56px; height: 56px; margin: 0 auto 16px; border-radius: 50%; background: var(--primary-light); color: var(--primary); font-size: 28px; line-height: 56px; }
+    .modal h3 { margin: 0 0 8px; font-size: 17px; }
+    .modal p { margin: 0 0 20px; font-size: 13px; color: var(--grey); }
+    .modal .btn { width: 100%; height: 44px; border: none; border-radius: 22px; background: var(--primary); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .toast { position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%); padding: 12px 20px; background: rgba(0,0,0,0.75); color: #fff; border-radius: 24px; font-size: 14px; z-index: 300; display: none; }
+    .toast.show { display: block; }
   </style>
 </head>
 <body>
   <main class="page">
     <div class="nav">
-      <div class="back">&#x2039;</div>
+      <a href="javascript:history.back()" class="back" style="text-decoration:none;color:inherit;">&#x2039;</a>
       认植申请
     </div>
 
@@ -190,15 +199,15 @@
       <h3>认植信息</h3>
       <div class="field">
         <label>认植期限</label>
-        <select>
-          <option value="1">1 年 — 应付 ¥199</option>
-          <option value="2">2 年 — 应付 ¥398</option>
-          <option value="3">3 年 — 应付 ¥597</option>
+        <select id="durationSelect">
+          <option value="199">1 年 — 应付 ¥199</option>
+          <option value="398" selected>2 年 — 应付 ¥398</option>
+          <option value="597">3 年 — 应付 ¥597</option>
         </select>
       </div>
       <div class="total-row">
         <span>应付总价</span>
-        <strong>¥ 398</strong>
+        <strong id="totalAmount">¥ 398</strong>
       </div>
       <div class="field">
         <label>实际付款金额（元）<span style="color:#e95f5f">*</span></label>
@@ -207,7 +216,7 @@
       </div>
       <div class="field">
         <label>付款凭证（截图）<span style="color:#e95f5f">*</span></label>
-        <div class="upload-zone">
+        <div class="upload-zone" id="uploadZone" style="cursor:pointer;">
           <div class="plus">+</div>
           点击上传付款截图，可多张
         </div>
@@ -220,12 +229,38 @@
     </div>
 
     <div class="footer-fixed">
-      <button class="btn" type="button">提交审核</button>
+      <button class="btn" type="button" id="btnSubmit">提交审核</button>
     </div>
+
+    <div class="overlay" id="successOverlay">
+      <div class="modal">
+        <div class="icon-ok">✓</div>
+        <h3>提交成功</h3>
+        <p>请等待管理员审核，审核结果将通过消息通知您</p>
+        <a href="fruit-tree-my-orders-mobile.html" class="btn">去我的果树认植订单</a>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
 
     <div class="link-note">
       提交后可到 <a href="./fruit-tree-my-orders-mobile.html">我的果树认植订单</a> 查看状态
     </div>
   </main>
+  <script>
+    (function(){
+      var durationSelect = document.getElementById('durationSelect');
+      var totalAmount = document.getElementById('totalAmount');
+      var uploadZone = document.getElementById('uploadZone');
+      var btnSubmit = document.getElementById('btnSubmit');
+      var successOverlay = document.getElementById('successOverlay');
+      var toast = document.getElementById('toast');
+      function updateTotal(){ totalAmount.textContent = '¥ ' + durationSelect.value; }
+      durationSelect.addEventListener('change', updateTotal);
+      function showToast(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(function(){ toast.classList.remove('show'); }, 2000); }
+      uploadZone.onclick = function(){ showToast('原型演示：正式环境可上传图片'); };
+      btnSubmit.onclick = function(){ successOverlay.classList.add('show'); };
+      successOverlay.onclick = function(e){ if(e.target === successOverlay) successOverlay.classList.remove('show'); };
+    })();
+  </script>
 </body>
 </html>

@@ -545,12 +545,23 @@
       height: 44px;
       border-radius: 12px;
     }
+    .overlay-confirm { display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 150; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+    .overlay-confirm.show { display: flex; }
+    .modal-confirm { width: 100%; max-width: 320px; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+    .modal-confirm .modal-title { padding: 18px; font-size: 16px; font-weight: 700; text-align: center; border-bottom: 1px solid var(--line); }
+    .modal-confirm .modal-body { padding: 20px; font-size: 14px; color: var(--grey); text-align: center; line-height: 1.6; }
+    .modal-confirm .modal-footer { display: flex; border-top: 1px solid var(--line); }
+    .modal-confirm .modal-footer button { flex: 1; height: 48px; border: none; font-size: 15px; background: #fff; color: var(--grey); cursor: pointer; }
+    .modal-confirm .modal-footer button.primary { background: var(--primary); color: #fff; font-weight: 600; }
+    .modal-confirm .modal-footer button.danger { color: var(--red); }
+    .toast { position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%); padding: 12px 20px; background: rgba(0,0,0,0.75); color: #fff; border-radius: 24px; font-size: 14px; z-index: 300; display: none; }
+    .toast.show { display: block; }
   </style>
 </head>
 <body>
   <main class="page">
     <div class="nav">
-      <div class="back">&#x2039;</div>
+      <a href="fruit-tree-list-mobile.html" class="back" style="text-decoration:none;color:inherit;">&#x2039;</a>
       果树配置
     </div>
 
@@ -565,8 +576,8 @@
           </div>
         </div>
         <div class="btn-row">
-          <button class="mini-btn-primary" type="button">上传封面</button>
-          <button class="mini-btn" type="button">更换封面</button>
+          <button class="mini-btn-primary" type="button" id="btnUploadCover">上传封面</button>
+          <button class="mini-btn" type="button" id="btnChangeCover">更换封面</button>
         </div>
       </div>
 
@@ -632,9 +643,9 @@
             <div class="upload-add">+</div>
           </div>
           <div class="record-actions">
-            <button class="mini-btn-primary" type="button">编辑本阶段</button>
-            <button class="mini-btn" type="button">上传图片</button>
-            <button class="mini-btn" type="button">隐藏展示</button>
+            <button class="mini-btn-primary" type="button" data-toast="已保存本阶段修改（原型演示）">编辑本阶段</button>
+            <button class="mini-btn" type="button" data-toast="请选择图片上传（原型演示）">上传图片</button>
+            <button class="mini-btn" type="button" data-toast="已隐藏该阶段展示（原型演示）">隐藏展示</button>
           </div>
         </div>
 
@@ -665,15 +676,15 @@
             <div class="upload-add">+</div>
           </div>
           <div class="record-actions">
-            <button class="mini-btn-primary" type="button">编辑本阶段</button>
-            <button class="mini-btn" type="button">上传图片</button>
-            <button class="mini-btn-danger" type="button">删除记录</button>
+            <button class="mini-btn-primary" type="button" data-toast="已保存本阶段修改（原型演示）">编辑本阶段</button>
+            <button class="mini-btn" type="button" data-toast="请选择图片上传（原型演示）">上传图片</button>
+            <button class="mini-btn-danger" type="button" data-toast="已删除该阶段记录（原型演示）">删除记录</button>
           </div>
         </div>
 
         <div class="btn-row">
           <button class="mini-btn-primary" type="button" id="openStagePopup">新增阶段记录</button>
-          <button class="mini-btn" type="button">批量上传</button>
+          <button class="mini-btn" type="button" data-toast="请选择多张图片批量上传（原型演示）">批量上传</button>
         </div>
       </div>
 
@@ -686,16 +697,38 @@
           </div>
         </div>
         <div class="btn-row">
-          <button class="mini-btn-primary" type="button">生成二维码</button>
-          <button class="mini-btn" type="button">预览详情页</button>
-          <button class="mini-btn-danger" type="button">删除果树</button>
+          <button class="mini-btn-primary" type="button" id="btnShowQr">生成二维码</button>
+          <a href="fruit-tree-detail-mobile.html" class="mini-btn" style="text-decoration:none;display:inline-block;line-height:32px;">预览详情页</a>
+          <button class="mini-btn-danger" type="button" id="btnDeleteTree">删除果树</button>
         </div>
       </div>
     </section>
 
     <div class="footer-box">
-      <button class="footer-btn-primary" type="button" style="flex: 1;">保存并发布</button>
+      <button class="footer-btn-primary" type="button" style="flex: 1;" id="btnSave">保存并发布</button>
     </div>
+
+    <div class="overlay-confirm" id="overlayDelete">
+      <div class="modal-confirm">
+        <div class="modal-title">确认删除</div>
+        <div class="modal-body">确定删除该果树及所有阶段记录？此操作不可恢复。</div>
+        <div class="modal-footer">
+          <button type="button" id="deleteCancel">取消</button>
+          <button type="button" class="primary danger" id="deleteConfirm">删除</button>
+        </div>
+      </div>
+    </div>
+    <div class="overlay-confirm" id="overlayQr">
+      <div class="modal-confirm">
+        <div class="modal-title">红富士苹果树 · 二维码</div>
+        <div class="modal-body">
+          <div class="fake-qr" style="margin:0 auto 12px;"></div>
+          扫码可查看该果树种植档案，可下载打印贴于标牌。
+        </div>
+        <div class="modal-footer"><button type="button" id="qrClose">关闭</button></div>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
 
     <div class="stage-overlay" id="stagePopup">
       <div class="stage-popup">
@@ -751,10 +784,36 @@
       closeBtn.addEventListener('click', closePopup);
       confirmBtn.addEventListener('click', function () {
         closePopup();
+        var t = document.getElementById('toast');
+        if (t) { t.textContent = '已添加阶段记录（原型演示）'; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2000); }
       });
       overlay.addEventListener('click', function (e) {
         if (e.target === overlay) closePopup();
       });
+
+      var toast = document.getElementById('toast');
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(function () { toast.classList.remove('show'); }, 2000);
+      }
+      document.querySelectorAll('[data-toast]').forEach(function (el) {
+        el.addEventListener('click', function () { showToast(this.getAttribute('data-toast')); });
+      });
+      document.getElementById('btnUploadCover').onclick = function () { showToast('请选择封面图片（原型演示）'); };
+      document.getElementById('btnChangeCover').onclick = function () { showToast('请选择新封面图片（原型演示）'); };
+      document.getElementById('btnSave').onclick = function () { showToast('保存成功（原型演示）'); };
+      document.getElementById('btnShowQr').onclick = function () { document.getElementById('overlayQr').classList.add('show'); };
+      document.getElementById('qrClose').onclick = function () { document.getElementById('overlayQr').classList.remove('show'); };
+      document.getElementById('btnDeleteTree').onclick = function () { document.getElementById('overlayDelete').classList.add('show'); };
+      document.getElementById('deleteCancel').onclick = function () { document.getElementById('overlayDelete').classList.remove('show'); };
+      document.getElementById('deleteConfirm').onclick = function () {
+        document.getElementById('overlayDelete').classList.remove('show');
+        showToast('已删除（原型演示）');
+        setTimeout(function () { location.href = 'fruit-tree-list-mobile.html'; }, 1500);
+      };
+      document.getElementById('overlayDelete').onclick = function (e) { if (e.target === this) this.classList.remove('show'); };
+      document.getElementById('overlayQr').onclick = function (e) { if (e.target === this) this.classList.remove('show'); };
     })();
   </script>
 </body>

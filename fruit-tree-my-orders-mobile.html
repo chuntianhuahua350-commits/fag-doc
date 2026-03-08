@@ -122,20 +122,33 @@
     .empty a { color: var(--primary-deep); text-decoration: none; }
     .link-note { margin-top: 14px; text-align: center; font-size: 12px; color: var(--grey); }
     .link-note a { color: var(--primary-deep); text-decoration: none; }
+    .overlay { display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+    .overlay.show { display: flex; }
+    .modal { width: 100%; max-width: 340px; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+    .modal-title { padding: 16px; font-size: 16px; font-weight: 700; border-bottom: 1px solid var(--line); }
+    .modal-body { padding: 16px; font-size: 13px; line-height: 1.7; color: var(--dark); }
+    .modal-body .row { margin-bottom: 10px; }
+    .modal-body .label { color: var(--grey); }
+    .modal-footer { display: flex; border-top: 1px solid var(--line); }
+    .modal-footer button { flex: 1; height: 48px; border: none; font-size: 15px; background: #fff; color: var(--grey); cursor: pointer; }
+    .modal-footer button.primary { background: var(--primary); color: #fff; font-weight: 600; }
+    .tabs span { cursor: pointer; }
+    .toast { position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%); padding: 12px 20px; background: rgba(0,0,0,0.75); color: #fff; border-radius: 24px; font-size: 14px; z-index: 300; display: none; }
+    .toast.show { display: block; }
   </style>
 </head>
 <body>
   <main class="page">
     <div class="nav">
-      <div class="back">&#x2039;</div>
+      <a href="fruit-tree-prototype-index.html" class="back" style="text-decoration:none;color:inherit;">&#x2039;</a>
       我的果树认植订单
     </div>
 
-    <div class="tabs">
-      <span class="active">全部</span>
-      <span>待审核</span>
-      <span>已通过</span>
-      <span>已拒绝</span>
+    <div class="tabs" id="tabs">
+      <span class="active" data-tab="all">全部</span>
+      <span data-tab="pending">待审核</span>
+      <span data-tab="passed">已通过</span>
+      <span data-tab="rejected">已拒绝</span>
     </div>
 
     <section class="list-box">
@@ -147,7 +160,7 @@
         <div class="tree-name">翠冠梨树</div>
         <div class="tree-meta">编号 B-01-08 · 认植 2 年 · ¥398 · 提交时间 2026-03-08 14:32</div>
         <div class="list-item-actions">
-          <button class="mini-btn" type="button">查看详情</button>
+          <button class="mini-btn btn-order-detail" type="button" data-order="FT202603080001" data-tree="翠冠梨树" data-status="待审核">查看详情</button>
         </div>
       </article>
 
@@ -159,7 +172,7 @@
         <div class="tree-name">红富士苹果树</div>
         <div class="tree-meta">编号 A-03-12 · 认植 3 年 · ¥897 · 审核通过 2026-03-06</div>
         <div class="list-item-actions">
-          <button class="mini-btn" type="button">查看果树</button>
+          <a href="fruit-tree-detail-mobile.html" class="mini-btn" style="text-decoration:none;display:inline-block;line-height:32px;text-align:center;">查看果树</a>
         </div>
       </article>
 
@@ -172,14 +185,47 @@
         <div class="tree-meta">编号 D-02-15 · 认植 1 年 · ¥259 · 提交时间 2026-03-01 11:20</div>
         <div class="reject-reason">拒绝原因：付款凭证不清晰，请重新上传能看清金额与商户信息的截图后再次提交。</div>
         <div class="list-item-actions">
-          <button class="mini-btn" type="button">再次申请</button>
+          <a href="fruit-tree-adopt-apply-mobile.html" class="mini-btn" style="text-decoration:none;display:inline-block;line-height:32px;text-align:center;">再次申请</a>
         </div>
       </article>
     </section>
+
+    <div class="overlay" id="orderDetailOverlay">
+      <div class="modal">
+        <div class="modal-title">订单详情</div>
+        <div class="modal-body" id="orderDetailBody"></div>
+        <div class="modal-footer"><button type="button" id="orderDetailClose">关闭</button></div>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
 
     <div class="link-note">
       已通过的认植可在 <a href="./fruit-tree-my-trees-mobile.html">我的果树</a> 查看种植状态
     </div>
   </main>
+  <script>
+    (function(){
+      var tabs = document.getElementById('tabs');
+      var overlay = document.getElementById('orderDetailOverlay');
+      var body = document.getElementById('orderDetailBody');
+      tabs.querySelectorAll('span').forEach(function(s){
+        s.onclick = function(){
+          tabs.querySelectorAll('span').forEach(function(x){ x.classList.remove('active'); });
+          s.classList.add('active');
+        };
+      });
+      document.querySelectorAll('.btn-order-detail').forEach(function(btn){
+        btn.onclick = function(){
+          body.innerHTML = '<div class="row"><span class="label">订单号：</span>' + btn.getAttribute('data-order') + '</div>' +
+            '<div class="row"><span class="label">果树：</span>' + btn.getAttribute('data-tree') + '</div>' +
+            '<div class="row"><span class="label">状态：</span>' + (btn.getAttribute('data-status') || '') + '</div>' +
+            '<div class="row">实际环境中可展示付款凭证、备注等</div>';
+          overlay.classList.add('show');
+        };
+      });
+      document.getElementById('orderDetailClose').onclick = function(){ overlay.classList.remove('show'); };
+      overlay.onclick = function(e){ if(e.target === overlay) overlay.classList.remove('show'); };
+    })();
+  </script>
 </body>
 </html>

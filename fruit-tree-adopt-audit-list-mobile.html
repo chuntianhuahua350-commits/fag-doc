@@ -110,19 +110,34 @@
     .mini-btn-danger { color: var(--red); background: #fff5f5; border: 1px solid #ffdede; }
     .link-note { margin-top: 14px; text-align: center; font-size: 12px; color: var(--grey); }
     .link-note a { color: var(--primary-deep); text-decoration: none; }
+    .overlay { display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+    .overlay.show { display: flex; }
+    .modal { width: 100%; max-width: 360px; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+    .modal-title { padding: 16px; font-size: 16px; font-weight: 700; border-bottom: 1px solid var(--line); }
+    .modal-body { padding: 16px; font-size: 13px; line-height: 1.7; color: var(--dark); }
+    .modal-body .row { margin-bottom: 10px; }
+    .modal-body .label { color: var(--grey); }
+    .modal-footer { display: flex; border-top: 1px solid var(--line); }
+    .modal-footer button { flex: 1; height: 48px; border: none; font-size: 15px; background: #fff; color: var(--grey); cursor: pointer; }
+    .modal-footer button.primary { background: var(--primary); color: #fff; font-weight: 600; }
+    .modal-footer button.danger { color: var(--red); }
+    .modal textarea { width: 100%; min-height: 80px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; font-size: 14px; margin-top: 12px; box-sizing: border-box; resize: vertical; }
+    .tabs span { cursor: pointer; }
+    .toast { position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%); padding: 12px 20px; background: rgba(0,0,0,0.75); color: #fff; border-radius: 24px; font-size: 14px; z-index: 300; display: none; }
+    .toast.show { display: block; }
   </style>
 </head>
 <body>
   <main class="page">
     <div class="nav">
-      <div class="back">&#x2039;</div>
+      <a href="fruit-tree-prototype-index.html" class="back" style="text-decoration:none;color:inherit;">&#x2039;</a>
       果树认植审核
     </div>
 
-    <div class="tabs">
-      <span class="active">待审核</span>
-      <span>已通过</span>
-      <span>已拒绝</span>
+    <div class="tabs" id="tabs">
+      <span class="active" data-tab="pending">待审核</span>
+      <span data-tab="passed">已通过</span>
+      <span data-tab="rejected">已拒绝</span>
     </div>
 
     <section class="list-box">
@@ -135,9 +150,9 @@
         <div class="tree-meta">编号 B-01-08 · 认植 2 年 · 应付 ¥398 · 实际付款 ¥398</div>
         <div class="tree-meta">用户 张** · 提交时间 2026-03-08 14:32</div>
         <div class="list-item-actions">
-          <button class="mini-btn" type="button">查看详情</button>
-          <button class="mini-btn-primary" type="button">通过</button>
-          <button class="mini-btn-danger" type="button">拒绝</button>
+          <button class="mini-btn btn-detail" type="button" data-order="FT202603080001" data-tree="翠冠梨树" data-meta="编号 B-01-08 · 认植 2 年 · 应付 ¥398 · 实际付款 ¥398 · 用户 张** · 2026-03-08 14:32">查看详情</button>
+          <button class="mini-btn-primary btn-approve" type="button" data-tree="翠冠梨树">通过</button>
+          <button class="mini-btn-danger btn-reject" type="button" data-tree="翠冠梨树">拒绝</button>
         </div>
       </article>
 
@@ -150,9 +165,9 @@
         <div class="tree-meta">编号 C-05-21 · 认植 1 年 · 应付 ¥399 · 实际付款 ¥399</div>
         <div class="tree-meta">用户 李** · 提交时间 2026-03-07 10:15</div>
         <div class="list-item-actions">
-          <button class="mini-btn" type="button">查看详情</button>
-          <button class="mini-btn-primary" type="button">通过</button>
-          <button class="mini-btn-danger" type="button">拒绝</button>
+          <button class="mini-btn btn-detail" type="button" data-order="FT202603070002" data-tree="阳光玫瑰葡萄树" data-meta="编号 C-05-21 · 认植 1 年 · 应付 ¥399 · 实际付款 ¥399 · 用户 李** · 2026-03-07 10:15">查看详情</button>
+          <button class="mini-btn-primary btn-approve" type="button" data-tree="阳光玫瑰葡萄树">通过</button>
+          <button class="mini-btn-danger btn-reject" type="button" data-tree="阳光玫瑰葡萄树">拒绝</button>
         </div>
       </article>
 
@@ -164,14 +179,106 @@
         <div class="tree-name">红富士苹果树</div>
         <div class="tree-meta">编号 A-03-12 · 认植 3 年 · 审核时间 2026-03-06 09:00</div>
         <div class="list-item-actions">
-          <button class="mini-btn" type="button">查看详情</button>
+          <button class="mini-btn btn-detail" type="button" data-order="FT202603050003" data-tree="红富士苹果树" data-meta="编号 A-03-12 · 认植 3 年 · 已通过 · 审核时间 2026-03-06 09:00">查看详情</button>
         </div>
       </article>
     </section>
+
+    <div class="overlay" id="overlayDetail">
+      <div class="modal">
+        <div class="modal-title">订单详情</div>
+        <div class="modal-body" id="detailBody"></div>
+        <div class="modal-footer"><button type="button" id="detailClose">关闭</button></div>
+      </div>
+    </div>
+    <div class="overlay" id="overlayApprove">
+      <div class="modal">
+        <div class="modal-title">确认通过</div>
+        <div class="modal-body" id="approveBody">确定通过该认植订单？通过后将通知用户。</div>
+        <div class="modal-footer">
+          <button type="button" id="approveCancel">取消</button>
+          <button type="button" class="primary" id="approveConfirm">确定通过</button>
+        </div>
+      </div>
+    </div>
+    <div class="overlay" id="overlayReject">
+      <div class="modal">
+        <div class="modal-title">拒绝原因</div>
+        <div class="modal-body">
+          <div class="row" id="rejectTreeName"></div>
+          <label style="display:block;margin-top:8px;">请填写拒绝原因（必填）</label>
+          <textarea id="rejectReason" placeholder="如：付款凭证不清晰，请重新上传..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="rejectCancel">取消</button>
+          <button type="button" class="primary danger" id="rejectConfirm">提交拒绝</button>
+        </div>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
 
     <div class="link-note">
       拒绝时需填写原因，审核结果将推送用户 · <a href="./fruit-tree-list-mobile.html">返回果树列表</a>
     </div>
   </main>
+  <script>
+    (function(){
+      var tabs = document.getElementById('tabs');
+      var overlayDetail = document.getElementById('overlayDetail');
+      var overlayApprove = document.getElementById('overlayApprove');
+      var overlayReject = document.getElementById('overlayReject');
+      var detailBody = document.getElementById('detailBody');
+      var approveBody = document.getElementById('approveBody');
+      var rejectTreeName = document.getElementById('rejectTreeName');
+      var rejectReason = document.getElementById('rejectReason');
+      var toast = document.getElementById('toast');
+      function setActiveTab(tabEl){
+        tabs.querySelectorAll('span').forEach(function(s){ s.classList.remove('active'); });
+        tabEl.classList.add('active');
+      }
+      tabs.querySelectorAll('span').forEach(function(s){
+        s.onclick = function(){ setActiveTab(s); };
+      });
+      function showToast(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(function(){ toast.classList.remove('show'); }, 2000); }
+      document.querySelectorAll('.btn-detail').forEach(function(btn){
+        btn.onclick = function(){
+          detailBody.innerHTML = '<div class="row"><span class="label">订单号：</span>' + btn.getAttribute('data-order') + '</div>' +
+            '<div class="row"><span class="label">果树：</span>' + btn.getAttribute('data-tree') + '</div>' +
+            '<div class="row"><span class="label">信息：</span>' + (btn.getAttribute('data-meta') || '') + '</div>' +
+            '<div class="row">实际环境中可展示付款凭证大图、用户备注等</div>';
+          overlayDetail.classList.add('show');
+        };
+      });
+      document.getElementById('detailClose').onclick = function(){ overlayDetail.classList.remove('show'); };
+      overlayDetail.onclick = function(e){ if(e.target === overlayDetail) overlayDetail.classList.remove('show'); };
+      var currentApproveTree = '';
+      document.querySelectorAll('.btn-approve').forEach(function(btn){
+        btn.onclick = function(){
+          currentApproveTree = btn.getAttribute('data-tree') || '';
+          approveBody.textContent = '确定通过「' + currentApproveTree + '」的认植订单？通过后将通知用户。';
+          overlayApprove.classList.add('show');
+        };
+      });
+      document.getElementById('approveCancel').onclick = function(){ overlayApprove.classList.remove('show'); };
+      document.getElementById('approveConfirm').onclick = function(){ overlayApprove.classList.remove('show'); showToast('已通过，已通知用户（原型演示）'); };
+      var currentRejectTree = '';
+      document.querySelectorAll('.btn-reject').forEach(function(btn){
+        btn.onclick = function(){
+          currentRejectTree = btn.getAttribute('data-tree') || '';
+          rejectTreeName.textContent = '果树：' + currentRejectTree;
+          rejectReason.value = '';
+          overlayReject.classList.add('show');
+        };
+      });
+      document.getElementById('rejectCancel').onclick = function(){ overlayReject.classList.remove('show'); };
+      document.getElementById('rejectConfirm').onclick = function(){
+        if(!rejectReason.value.trim()){ showToast('请填写拒绝原因'); return; }
+        overlayReject.classList.remove('show');
+        showToast('已拒绝，已通知用户（原型演示）');
+      };
+      overlayApprove.onclick = function(e){ if(e.target === overlayApprove) overlayApprove.classList.remove('show'); };
+      overlayReject.onclick = function(e){ if(e.target === overlayReject) overlayReject.classList.remove('show'); };
+    })();
+  </script>
 </body>
 </html>

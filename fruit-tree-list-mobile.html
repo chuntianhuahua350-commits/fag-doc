@@ -323,17 +323,51 @@
       color: var(--primary-deep);
       text-decoration: none;
     }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .overlay.show { display: flex; }
+    .modal {
+      width: 100%;
+      max-width: 320px;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+    .modal-title { padding: 18px; font-size: 16px; font-weight: 700; text-align: center; border-bottom: 1px solid var(--line); }
+    .modal-body { padding: 20px; font-size: 14px; color: var(--grey); line-height: 1.6; text-align: center; }
+    .modal-footer { display: flex; border-top: 1px solid var(--line); }
+    .modal-footer button { flex: 1; height: 48px; border: none; font-size: 15px; background: #fff; color: var(--grey); }
+    .modal-footer button.primary { background: var(--primary); color: #fff; font-weight: 600; }
+    .modal-footer button.danger { color: var(--red); }
+    .qr-placeholder { width: 120px; height: 120px; margin: 0 auto 12px; background: linear-gradient(90deg,#111 8px,transparent 8px), linear-gradient(#111 8px,transparent 8px); background-size: 24px 24px; background-color: #fff; border-radius: 12px; }
+    .toast { position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%); padding: 12px 20px; background: rgba(0,0,0,0.75); color: #fff; border-radius: 24px; font-size: 14px; z-index: 300; display: none; }
+    .toast.show { display: block; animation: fadeIn 0.2s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
 <body>
   <main class="page">
     <div class="nav">
-      <div class="back">&#x2039;</div>
+      <a href="fruit-tree-prototype-index.html" class="back" style="text-decoration:none;color:inherit;">&#x2039;</a>
       果树列表
     </div>
 
     <div class="search-box">
-      <input class="search" type="text" value="搜索果树名称 / 编号 / 区域" />
+      <input class="search" type="text" placeholder="搜索果树名称 / 编号 / 区域" id="searchInput" />
     </div>
 
     <section class="list-box">
@@ -356,10 +390,10 @@
         </div>
         <div class="space-between align-items action-row">
           <div class="action-bar">
-            <button class="mini-btn-primary" type="button">编辑配置</button>
-            <button class="mini-btn" type="button">查看详情</button>
-            <button class="mini-btn" type="button">二维码</button>
-            <button class="mini-btn-danger" type="button">删除</button>
+            <a href="fruit-tree-config-mobile.html" class="mini-btn-primary" style="text-decoration:none;display:inline-block;line-height:32px;">编辑配置</a>
+            <a href="fruit-tree-detail-mobile.html" class="mini-btn" style="text-decoration:none;display:inline-block;line-height:32px;">查看详情</a>
+            <button class="mini-btn btn-qr" type="button" data-name="红富士苹果树">二维码</button>
+            <button class="mini-btn-danger btn-del" type="button" data-name="红富士苹果树">删除</button>
           </div>
         </div>
       </article>
@@ -382,10 +416,10 @@
         </div>
         <div class="space-between align-items action-row">
           <div class="action-bar">
-            <button class="mini-btn-primary" type="button">编辑配置</button>
-            <button class="mini-btn" type="button">查看详情</button>
-            <button class="mini-btn" type="button">二维码</button>
-            <button class="mini-btn-danger" type="button">删除</button>
+            <a href="fruit-tree-config-mobile.html" class="mini-btn-primary" style="text-decoration:none;display:inline-block;line-height:32px;">编辑配置</a>
+            <a href="fruit-tree-detail-mobile.html" class="mini-btn" style="text-decoration:none;display:inline-block;line-height:32px;">查看详情</a>
+            <button class="mini-btn btn-qr" type="button" data-name="翠冠梨树">二维码</button>
+            <button class="mini-btn-danger btn-del" type="button" data-name="翠冠梨树">删除</button>
           </div>
         </div>
       </article>
@@ -408,10 +442,10 @@
         </div>
         <div class="space-between align-items action-row">
           <div class="action-bar">
-            <button class="mini-btn-primary" type="button">编辑配置</button>
-            <button class="mini-btn" type="button">查看详情</button>
-            <button class="mini-btn" type="button">二维码</button>
-            <button class="mini-btn-danger" type="button">删除</button>
+            <a href="fruit-tree-config-mobile.html" class="mini-btn-primary" style="text-decoration:none;display:inline-block;line-height:32px;">编辑配置</a>
+            <a href="fruit-tree-detail-mobile.html" class="mini-btn" style="text-decoration:none;display:inline-block;line-height:32px;">查看详情</a>
+            <button class="mini-btn btn-qr" type="button" data-name="阳光玫瑰葡萄树">二维码</button>
+            <button class="mini-btn-danger btn-del" type="button" data-name="阳光玫瑰葡萄树">删除</button>
           </div>
         </div>
       </article>
@@ -434,10 +468,10 @@
         </div>
         <div class="space-between align-items action-row">
           <div class="action-bar">
-            <button class="mini-btn-primary" type="button">编辑配置</button>
-            <button class="mini-btn" type="button">查看详情</button>
-            <button class="mini-btn" type="button">二维码</button>
-            <button class="mini-btn-danger" type="button">删除</button>
+            <a href="fruit-tree-config-mobile.html" class="mini-btn-primary" style="text-decoration:none;display:inline-block;line-height:32px;">编辑配置</a>
+            <a href="fruit-tree-detail-mobile.html" class="mini-btn" style="text-decoration:none;display:inline-block;line-height:32px;">查看详情</a>
+            <button class="mini-btn btn-qr" type="button" data-name="蜜桃树">二维码</button>
+            <button class="mini-btn-danger btn-del" type="button" data-name="蜜桃树">删除</button>
           </div>
         </div>
       </article>
@@ -445,7 +479,32 @@
       <div class="empty-tip">下拉可继续加载更多果树档案</div>
     </section>
 
-    <div class="add-btn">+</div>
+    <a href="fruit-tree-config-mobile.html" class="add-btn" style="text-decoration:none;color:#fff;">+</a>
+
+    <div class="overlay" id="overlayDelete">
+      <div class="modal">
+        <div class="modal-title">确认删除</div>
+        <div class="modal-body" id="deleteModalBody">确定删除该果树档案？删除后不可恢复。</div>
+        <div class="modal-footer">
+          <button type="button" id="deleteCancel">取消</button>
+          <button type="button" class="primary danger" id="deleteConfirm">删除</button>
+        </div>
+      </div>
+    </div>
+    <div class="overlay" id="overlayQr">
+      <div class="modal">
+        <div class="modal-title" id="qrModalTitle">果树二维码</div>
+        <div class="modal-body">
+          <div class="qr-placeholder" aria-hidden="true"></div>
+          <p style="margin:0;color:var(--dark);">扫码可查看该果树种植档案</p>
+          <p style="margin:8px 0 0;font-size:12px;">实际使用时可下载打印贴于果树标牌</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="qrClose">关闭</button>
+        </div>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
 
     <div class="link-note">
       配置页：<a href="./fruit-tree-config-mobile.html">果树配置</a> ·
@@ -453,5 +512,42 @@
       认植审核：<a href="./fruit-tree-adopt-audit-list-mobile.html">果树认植审核</a>
     </div>
   </main>
+  <script>
+    (function(){
+      var overlayDelete = document.getElementById('overlayDelete');
+      var overlayQr = document.getElementById('overlayQr');
+      var deleteModalBody = document.getElementById('deleteModalBody');
+      var qrModalTitle = document.getElementById('qrModalTitle');
+      var toast = document.getElementById('toast');
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(function(){ toast.classList.remove('show'); }, 2000);
+      }
+      document.querySelectorAll('.btn-del').forEach(function(btn){
+        btn.onclick = function(){
+          var name = btn.getAttribute('data-name') || '该果树';
+          deleteModalBody.textContent = '确定删除「' + name + '」档案？删除后不可恢复。';
+          overlayDelete.classList.add('show');
+        };
+      });
+      document.getElementById('deleteCancel').onclick = function(){ overlayDelete.classList.remove('show'); };
+      document.getElementById('deleteConfirm').onclick = function(){
+        overlayDelete.classList.remove('show');
+        showToast('已删除（原型演示）');
+      };
+      document.querySelectorAll('.btn-qr').forEach(function(btn){
+        btn.onclick = function(){
+          var name = btn.getAttribute('data-name') || '果树';
+          qrModalTitle.textContent = name + ' · 二维码';
+          overlayQr.classList.add('show');
+        };
+      });
+      document.getElementById('qrClose').onclick = function(){ overlayQr.classList.remove('show'); };
+      overlayDelete.onclick = function(e){ if(e.target === overlayDelete) overlayDelete.classList.remove('show'); };
+      overlayQr.onclick = function(e){ if(e.target === overlayQr) overlayQr.classList.remove('show'); };
+      document.getElementById('searchInput').onfocus = function(){ showToast('搜索功能在正式环境中可用'); };
+    })();
+  </script>
 </body>
 </html>
