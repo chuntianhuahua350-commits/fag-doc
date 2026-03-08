@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>我的果树认植订单</title>
+  <style>
+    :root {
+      --primary: #2fb168;
+      --primary-deep: #23824d;
+      --primary-light: #eaf9f1;
+      --red: #e95f5f;
+      --orange: #f0a63b;
+      --grey: #8f9a94;
+      --dark: #26342c;
+      --line: #edf0ee;
+      --shadow: 0 10px 30px rgba(24, 39, 29, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef8ef 0%, #f7f8f7 120px, #f7f8f7 100%);
+      color: var(--dark);
+    }
+    .page { max-width: 430px; min-height: 100vh; margin: 0 auto; padding: 0 14px 24px; }
+    .nav {
+      height: 92px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1c2e23;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(238, 248, 239, 0.96), rgba(238, 248, 239, 0.72), rgba(238, 248, 239, 0));
+      backdrop-filter: blur(10px);
+    }
+    .nav .back {
+      position: absolute;
+      left: 0;
+      bottom: 11px;
+      width: 38px;
+      height: 38px;
+      border-radius: 38px;
+      border: 1px solid rgba(47, 177, 104, 0.15);
+      background: rgba(255, 255, 255, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-deep);
+      font-size: 18px;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: #fff;
+      padding: 6px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+    .tabs span {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      color: var(--grey);
+    }
+    .tabs span.active { background: var(--primary); color: #fff; font-weight: 600; }
+    .list-box { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); }
+    .list-item {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .list-item:last-child { border-bottom: none; }
+    .list-item-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .order-no { font-size: 12px; color: var(--grey); }
+    .status-tag {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-tag.pending { background: #fff8e6; color: var(--orange); }
+    .status-tag.passed { background: var(--primary-light); color: var(--primary-deep); }
+    .status-tag.rejected { background: #fff5f5; color: var(--red); }
+    .tree-name { font-size: 15px; font-weight: 700; color: #223028; margin-bottom: 4px; }
+    .tree-meta { font-size: 12px; color: var(--grey); line-height: 1.6; }
+    .reject-reason {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #fff5f5;
+      font-size: 12px;
+      color: #a54a4a;
+      line-height: 1.5;
+    }
+    .list-item-actions { margin-top: 12px; }
+    .mini-btn {
+      min-width: 72px;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: 34px;
+      font-size: 12px;
+      border: none;
+      color: var(--primary-deep);
+      background: var(--primary-light);
+      border: 1px solid rgba(47, 177, 104, 0.25);
+    }
+    .empty {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--grey);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .empty a { color: var(--primary-deep); text-decoration: none; }
+    .link-note { margin-top: 14px; text-align: center; font-size: 12px; color: var(--grey); }
+    .link-note a { color: var(--primary-deep); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="nav">
+      <div class="back">&#x2039;</div>
+      我的果树认植订单
+    </div>
+
+    <div class="tabs">
+      <span class="active">全部</span>
+      <span>待审核</span>
+      <span>已通过</span>
+      <span>已拒绝</span>
+    </div>
+
+    <section class="list-box">
+      <article class="list-item">
+        <div class="list-item-top">
+          <span class="order-no">订单号 FT202603080001</span>
+          <span class="status-tag pending">待审核</span>
+        </div>
+        <div class="tree-name">翠冠梨树</div>
+        <div class="tree-meta">编号 B-01-08 · 认植 2 年 · ¥398 · 提交时间 2026-03-08 14:32</div>
+        <div class="list-item-actions">
+          <button class="mini-btn" type="button">查看详情</button>
+        </div>
+      </article>
+
+      <article class="list-item">
+        <div class="list-item-top">
+          <span class="order-no">订单号 FT202603050003</span>
+          <span class="status-tag passed">已通过</span>
+        </div>
+        <div class="tree-name">红富士苹果树</div>
+        <div class="tree-meta">编号 A-03-12 · 认植 3 年 · ¥897 · 审核通过 2026-03-06</div>
+        <div class="list-item-actions">
+          <button class="mini-btn" type="button">查看果树</button>
+        </div>
+      </article>
+
+      <article class="list-item">
+        <div class="list-item-top">
+          <span class="order-no">订单号 FT202603010005</span>
+          <span class="status-tag rejected">已拒绝</span>
+        </div>
+        <div class="tree-name">蜜桃树</div>
+        <div class="tree-meta">编号 D-02-15 · 认植 1 年 · ¥259 · 提交时间 2026-03-01 11:20</div>
+        <div class="reject-reason">拒绝原因：付款凭证不清晰，请重新上传能看清金额与商户信息的截图后再次提交。</div>
+        <div class="list-item-actions">
+          <button class="mini-btn" type="button">再次申请</button>
+        </div>
+      </article>
+    </section>
+
+    <div class="link-note">
+      已通过的认植可在 <a href="./fruit-tree-my-trees-mobile.html">我的果树</a> 查看种植状态
+    </div>
+  </main>
+</body>
+</html>

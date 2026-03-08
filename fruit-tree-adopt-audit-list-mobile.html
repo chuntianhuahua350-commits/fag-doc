@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>果树认植审核</title>
+  <style>
+    :root {
+      --primary: #2fb168;
+      --primary-deep: #23824d;
+      --primary-light: #eaf9f1;
+      --red: #e95f5f;
+      --orange: #f0a63b;
+      --grey: #8f9a94;
+      --dark: #26342c;
+      --line: #edf0ee;
+      --shadow: 0 10px 30px rgba(24, 39, 29, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef8ef 0%, #f7f8f7 120px, #f7f8f7 100%);
+      color: var(--dark);
+    }
+    .page { max-width: 430px; min-height: 100vh; margin: 0 auto; padding: 0 14px 24px; }
+    .nav {
+      height: 92px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1c2e23;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(238, 248, 239, 0.96), rgba(238, 248, 239, 0.72), rgba(238, 248, 239, 0));
+      backdrop-filter: blur(10px);
+    }
+    .nav .back {
+      position: absolute;
+      left: 0;
+      bottom: 11px;
+      width: 38px;
+      height: 38px;
+      border-radius: 38px;
+      border: 1px solid rgba(47, 177, 104, 0.15);
+      background: rgba(255, 255, 255, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-deep);
+      font-size: 18px;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: #fff;
+      padding: 6px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+    .tabs span {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      color: var(--grey);
+    }
+    .tabs span.active { background: var(--primary); color: #fff; font-weight: 600; }
+    .list-box { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); }
+    .list-item {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .list-item:last-child { border-bottom: none; }
+    .list-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .order-no { font-size: 12px; color: var(--grey); }
+    .status-tag {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-tag.pending { background: #fff8e6; color: var(--orange); }
+    .status-tag.passed { background: var(--primary-light); color: var(--primary-deep); }
+    .status-tag.rejected { background: #fff5f5; color: var(--red); }
+    .tree-name { font-size: 15px; font-weight: 700; color: #223028; margin-bottom: 4px; }
+    .tree-meta { font-size: 12px; color: var(--grey); line-height: 1.6; }
+    .list-item-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+    .mini-btn, .mini-btn-primary, .mini-btn-danger {
+      min-width: 72px;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: 34px;
+      font-size: 12px;
+      border: none;
+    }
+    .mini-btn { color: #5d6b64; background: #f5f6f5; border: 1px solid #ebefec; }
+    .mini-btn-primary { color: #fff; background: var(--primary); }
+    .mini-btn-danger { color: var(--red); background: #fff5f5; border: 1px solid #ffdede; }
+    .link-note { margin-top: 14px; text-align: center; font-size: 12px; color: var(--grey); }
+    .link-note a { color: var(--primary-deep); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="nav">
+      <div class="back">&#x2039;</div>
+      果树认植审核
+    </div>
+
+    <div class="tabs">
+      <span class="active">待审核</span>
+      <span>已通过</span>
+      <span>已拒绝</span>
+    </div>
+
+    <section class="list-box">
+      <article class="list-item">
+        <div class="list-item-top">
+          <span class="order-no">订单号 FT202603080001</span>
+          <span class="status-tag pending">待审核</span>
+        </div>
+        <div class="tree-name">翠冠梨树</div>
+        <div class="tree-meta">编号 B-01-08 · 认植 2 年 · 应付 ¥398 · 实际付款 ¥398</div>
+        <div class="tree-meta">用户 张** · 提交时间 2026-03-08 14:32</div>
+        <div class="list-item-actions">
+          <button class="mini-btn" type="button">查看详情</button>
+          <button class="mini-btn-primary" type="button">通过</button>
+          <button class="mini-btn-danger" type="button">拒绝</button>
+        </div>
+      </article>
+
+      <article class="list-item">
+        <div class="list-item-top">
+          <span class="order-no">订单号 FT202603070002</span>
+          <span class="status-tag pending">待审核</span>
+        </div>
+        <div class="tree-name">阳光玫瑰葡萄树</div>
+        <div class="tree-meta">编号 C-05-21 · 认植 1 年 · 应付 ¥399 · 实际付款 ¥399</div>
+        <div class="tree-meta">用户 李** · 提交时间 2026-03-07 10:15</div>
+        <div class="list-item-actions">
+          <button class="mini-btn" type="button">查看详情</button>
+          <button class="mini-btn-primary" type="button">通过</button>
+          <button class="mini-btn-danger" type="button">拒绝</button>
+        </div>
+      </article>
+
+      <article class="list-item">
+        <div class="list-item-top">
+          <span class="order-no">订单号 FT202603050003</span>
+          <span class="status-tag passed">已通过</span>
+        </div>
+        <div class="tree-name">红富士苹果树</div>
+        <div class="tree-meta">编号 A-03-12 · 认植 3 年 · 审核时间 2026-03-06 09:00</div>
+        <div class="list-item-actions">
+          <button class="mini-btn" type="button">查看详情</button>
+        </div>
+      </article>
+    </section>
+
+    <div class="link-note">
+      拒绝时需填写原因，审核结果将推送用户 · <a href="./fruit-tree-list-mobile.html">返回果树列表</a>
+    </div>
+  </main>
+</body>
+</html>

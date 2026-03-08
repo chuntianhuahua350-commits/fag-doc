@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>认植申请</title>
+  <style>
+    :root {
+      --primary: #2fb168;
+      --primary-deep: #23824d;
+      --primary-light: #eaf9f1;
+      --grey: #8f9a94;
+      --dark: #26342c;
+      --line: #edf0ee;
+      --shadow: 0 10px 30px rgba(24, 39, 29, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef8ef 0%, #f7f8f7 120px, #f7f8f7 100%);
+      color: var(--dark);
+    }
+    .page {
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 0 14px 100px;
+    }
+    .nav {
+      height: 92px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1c2e23;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(238, 248, 239, 0.96), rgba(238, 248, 239, 0.72), rgba(238, 248, 239, 0));
+      backdrop-filter: blur(10px);
+    }
+    .nav .back {
+      position: absolute;
+      left: 0;
+      bottom: 11px;
+      width: 38px;
+      height: 38px;
+      border-radius: 38px;
+      border: 1px solid rgba(47, 177, 104, 0.15);
+      background: rgba(255, 255, 255, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-deep);
+      font-size: 18px;
+    }
+    .tree-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .tree-card img {
+      width: 88px;
+      height: 76px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #eef1ef;
+    }
+    .tree-card h2 { margin: 0 0 6px; font-size: 17px; color: #223028; }
+    .tree-card .code { font-size: 12px; color: var(--grey); }
+    .tree-card .price { font-size: 15px; font-weight: 700; color: var(--primary-deep); margin-top: 6px; }
+    .form-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+    .form-card h3 { margin: 0 0 14px; font-size: 15px; color: #223028; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 13px; color: #2c3a32; margin-bottom: 8px; }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 14px;
+      color: var(--dark);
+      background: #fff;
+      box-sizing: border-box;
+    }
+    .field textarea { min-height: 80px; resize: vertical; }
+    .field .hint { font-size: 12px; color: var(--grey); margin-top: 6px; }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-top: 1px solid var(--line);
+      margin-top: 12px;
+    }
+    .total-row strong { font-size: 16px; color: var(--primary-deep); }
+    .upload-zone {
+      border: 1px dashed #d6ddd8;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      background: #f8f9f8;
+      color: var(--grey);
+      font-size: 13px;
+    }
+    .upload-zone .plus { font-size: 28px; margin-bottom: 8px; }
+    .upload-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .upload-preview img {
+      width: 72px;
+      height: 72px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #eef1ef;
+    }
+    .notice {
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      border-radius: 12px;
+      background: var(--primary-light);
+      color: var(--primary-deep);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .footer-fixed {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100%;
+      max-width: 430px;
+      padding: 12px 14px 18px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 -8px 20px rgba(20, 36, 27, 0.06);
+      backdrop-filter: blur(10px);
+    }
+    .footer-fixed .btn {
+      width: 100%;
+      height: 48px;
+      border: none;
+      border-radius: 24px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--primary);
+    }
+    .link-note { margin-top: 14px; text-align: center; font-size: 12px; color: var(--grey); }
+    .link-note a { color: var(--primary-deep); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="nav">
+      <div class="back">&#x2039;</div>
+      认植申请
+    </div>
+
+    <div class="notice">
+      请先与商户线下完成交易，再上传付款凭证并填写实际付款金额，提交后等待管理员审核。
+    </div>
+
+    <div class="tree-card">
+      <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=400&q=80" alt="翠冠梨树" />
+      <div>
+        <h2>翠冠梨树</h2>
+        <div class="code">编号 B-01-08 · 南一区 8 号垄</div>
+        <div class="price">认植年价 ¥199/年</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h3>认植信息</h3>
+      <div class="field">
+        <label>认植期限</label>
+        <select>
+          <option value="1">1 年 — 应付 ¥199</option>
+          <option value="2">2 年 — 应付 ¥398</option>
+          <option value="3">3 年 — 应付 ¥597</option>
+        </select>
+      </div>
+      <div class="total-row">
+        <span>应付总价</span>
+        <strong>¥ 398</strong>
+      </div>
+      <div class="field">
+        <label>实际付款金额（元）<span style="color:#e95f5f">*</span></label>
+        <input type="number" placeholder="请填写您线下实际支付的金额" value="" />
+        <div class="hint">供管理员对照付款凭证审核</div>
+      </div>
+      <div class="field">
+        <label>付款凭证（截图）<span style="color:#e95f5f">*</span></label>
+        <div class="upload-zone">
+          <div class="plus">+</div>
+          点击上传付款截图，可多张
+        </div>
+        <div class="upload-preview"></div>
+      </div>
+      <div class="field">
+        <label>备注（选填）</label>
+        <textarea placeholder="如：转账备注、交易时间等"></textarea>
+      </div>
+    </div>
+
+    <div class="footer-fixed">
+      <button class="btn" type="button">提交审核</button>
+    </div>
+
+    <div class="link-note">
+      提交后可到 <a href="./fruit-tree-my-orders-mobile.html">我的果树认植订单</a> 查看状态
+    </div>
+  </main>
+</body>
+</html>

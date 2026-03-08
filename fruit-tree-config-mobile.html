@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>果树配置</title>
+  <style>
+    :root {
+      --primary: #2fb168;
+      --primary-deep: #23824d;
+      --primary-light: #eaf9f1;
+      --red: #e95f5f;
+      --grey: #8f9a94;
+      --dark: #26342c;
+      --line: #edf0ee;
+      --bg: #f7f8f7;
+      --shadow: 0 10px 30px rgba(24, 39, 29, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef8ef 0%, #f7f8f7 180px, #f7f8f7 100%);
+      color: var(--dark);
+    }
+
+    .page {
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 0 14px 94px;
+      position: relative;
+    }
+
+    .nav {
+      height: 92px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1c2e23;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(238, 248, 239, 0.96), rgba(238, 248, 239, 0.72), rgba(238, 248, 239, 0));
+      backdrop-filter: blur(10px);
+    }
+
+    .nav .back {
+      position: absolute;
+      left: 0;
+      bottom: 11px;
+      width: 38px;
+      height: 38px;
+      border-radius: 38px;
+      border: 1px solid rgba(47, 177, 104, 0.15);
+      background: rgba(255, 255, 255, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-deep);
+      font-size: 18px;
+    }
+
+    .tips-box {
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      border-radius: 14px;
+      background: var(--primary-light);
+      color: var(--primary-deep);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .form-box {
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .card-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      background: #fff;
+    }
+
+    .card-title {
+      padding: 14px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #223028;
+      border-bottom: 1px solid var(--line);
+      background: #fcfcfc;
+    }
+
+    .field-row {
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .field-row:last-child {
+      border-bottom: none;
+    }
+
+    .field-label {
+      color: #2c3a32;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .field-value {
+      color: var(--grey);
+      text-align: right;
+      flex: 1;
+    }
+
+    .field-value strong {
+      color: var(--dark);
+      font-weight: 600;
+    }
+
+    .field-textarea {
+      padding: 14px 16px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .textarea-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: #2c3a32;
+    }
+
+    .textarea-box {
+      min-height: 92px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f8f9f8;
+      color: var(--grey);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .cover-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .cover-img {
+      width: 96px;
+      height: 84px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #eef1ef;
+      flex: 0 0 auto;
+    }
+
+    .cover-content {
+      flex: 1;
+    }
+
+    .cover-content h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: #223028;
+    }
+
+    .cover-content p {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--grey);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 16px 16px;
+    }
+
+    .mini-btn,
+    .mini-btn-primary,
+    .mini-btn-danger {
+      min-width: 82px;
+      height: 34px;
+      padding: 0 14px;
+      border-radius: 34px;
+      font-size: 12px;
+      border: none;
+    }
+
+    .mini-btn {
+      color: #5d6b64;
+      background: #f5f6f5;
+      border: 1px solid #ebefec;
+    }
+
+    .mini-btn-primary {
+      color: #fff;
+      background: var(--primary);
+    }
+
+    .mini-btn-danger {
+      color: var(--red);
+      background: #fff5f5;
+      border: 1px solid #ffdede;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 16px;
+    }
+
+    .chip {
+      padding: 8px 14px;
+      border-radius: 28px;
+      font-size: 12px;
+      color: var(--primary-deep);
+      background: var(--primary-light);
+    }
+
+    .record-item {
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .record-item:last-child {
+      border-bottom: none;
+    }
+
+    .record-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .record-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #223028;
+      margin-bottom: 6px;
+    }
+
+    .record-title-input {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #223028;
+      background: #fff;
+    }
+
+    .record-meta {
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--grey);
+    }
+
+    .record-tag {
+      padding: 7px 12px;
+      border-radius: 28px;
+      font-size: 12px;
+      color: var(--primary-deep);
+      background: var(--primary-light);
+      white-space: nowrap;
+    }
+
+    .record-desc {
+      margin: 0 0 12px;
+      font-size: 13px;
+      line-height: 1.75;
+      color: #55655d;
+    }
+
+    .record-desc-input {
+      width: 100%;
+      min-height: 88px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.75;
+      color: #2c3a32;
+      background: #fff;
+      resize: vertical;
+    }
+
+    .metric-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .metric-box {
+      flex: 1;
+      padding: 10px 8px;
+      text-align: center;
+      border-radius: 12px;
+      background: #f8f9f8;
+    }
+
+    .metric-box strong {
+      display: block;
+      font-size: 14px;
+      color: #2c3a32;
+      margin-bottom: 4px;
+    }
+
+    .metric-box .metric-input {
+      width: 100%;
+      padding: 8px 10px;
+      margin-top: 6px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 14px;
+      text-align: center;
+      color: #2c3a32;
+      background: #fff;
+    }
+
+    .metric-box span {
+      font-size: 11px;
+      color: var(--grey);
+    }
+
+    .upload-list {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .upload-item,
+    .upload-add {
+      width: 74px;
+      height: 74px;
+      border-radius: 12px;
+      flex: 0 0 auto;
+    }
+
+    .upload-item {
+      object-fit: cover;
+      background: #eef1ef;
+    }
+
+    .upload-add {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f7f5;
+      border: 1px dashed #d6ddd8;
+      color: var(--grey);
+      font-size: 30px;
+    }
+
+    .record-actions {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .qr-box {
+      padding: 16px;
+    }
+
+    .qr-card {
+      padding: 16px;
+      border-radius: 16px;
+      background: #f8f9f8;
+      text-align: center;
+    }
+
+    .fake-qr {
+      width: 98px;
+      height: 98px;
+      margin: 0 auto 12px;
+      border-radius: 16px;
+      background:
+        linear-gradient(90deg, #111 10px, transparent 10px) 0 0 / 24px 24px,
+        linear-gradient(#111 10px, transparent 10px) 0 0 / 24px 24px,
+        linear-gradient(90deg, transparent 14px, #111 14px) 0 0 / 24px 24px,
+        linear-gradient(transparent 14px, #111 14px) 0 0 / 24px 24px,
+        #fff;
+      border: 6px solid #fff;
+      box-shadow: 0 8px 18px rgba(17, 17, 17, 0.08);
+    }
+
+    .qr-card p {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--grey);
+    }
+
+    .footer-box {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100%;
+      max-width: 430px;
+      background: rgba(255, 255, 255, 0.96);
+      padding: 12px 14px 18px;
+      display: flex;
+      gap: 10px;
+      box-shadow: 0 -8px 20px rgba(20, 36, 27, 0.06);
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-btn,
+    .footer-btn-primary {
+      height: 44px;
+      border-radius: 44px;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .footer-btn {
+      color: #5d6b64;
+      background: #f5f6f5;
+      border: 1px solid #ebefec;
+    }
+
+    .footer-btn-primary {
+      color: #fff;
+      background: var(--primary);
+    }
+
+    .stage-overlay {
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .stage-overlay.show {
+      display: flex;
+    }
+
+    .stage-popup {
+      width: 100%;
+      max-width: 380px;
+      max-height: 85vh;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stage-popup-title {
+      padding: 18px 20px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #223028;
+      border-bottom: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .stage-popup-body {
+      padding: 16px 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .stage-popup .field-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #2c3a32;
+    }
+
+    .stage-popup .popup-input,
+    .stage-popup .popup-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 14px;
+      color: #2c3a32;
+      background: #fff;
+      box-sizing: border-box;
+    }
+
+    .stage-popup .popup-textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .stage-popup .metric-row {
+      margin-bottom: 12px;
+    }
+
+    .stage-popup-footer {
+      display: flex;
+      gap: 12px;
+      padding: 14px 20px 20px;
+      border-top: 1px solid var(--line);
+      background: #fcfcfc;
+    }
+
+    .stage-popup-footer .footer-btn,
+    .stage-popup-footer .footer-btn-primary {
+      flex: 1;
+      height: 44px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="nav">
+      <div class="back">&#x2039;</div>
+      果树配置
+    </div>
+
+    <section class="form-box">
+      <div class="card-box">
+        <div class="card-title">封面与编号</div>
+        <div class="cover-box">
+          <img class="cover-img" src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=800&q=80" alt="红富士苹果树封面" />
+          <div class="cover-content">
+            <h3>红富士苹果树</h3>
+            <p>当前封面图将同步用于果树列表卡片、扫码详情页头图和分享展示。</p>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="mini-btn-primary" type="button">上传封面</button>
+          <button class="mini-btn" type="button">更换封面</button>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div class="card-title">基本信息</div>
+        <div class="field-row">
+          <div class="field-label">果树名称</div>
+          <div class="field-value"><strong>红富士苹果树</strong></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">果树编号</div>
+          <div class="field-value"><strong>A-03-12</strong></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">种植时间</div>
+          <div class="field-value">2022-03-18</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">当前状态</div>
+          <div class="field-value">挂果中</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">所属区域</div>
+          <div class="field-value">东二区 12 号垄</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">认植年价（元/年）</div>
+          <div class="field-value"><strong>299</strong></div>
+        </div>
+        <div class="field-textarea">
+          <span class="textarea-label">果树简介</span>
+          <div class="textarea-box">这棵果树主要用于扫码查看种植情况，普通用户可查看成长阶段、阶段图片和测量数据，后台可随时维护更新。</div>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div class="card-title">阶段记录配置</div>
+
+        <div class="record-item">
+          <div class="record-top">
+            <div class="record-meta">记录时间：2026-08-03 · 对外可见 · 最近更新人：管理员</div>
+            <div class="record-tag">当前展示中</div>
+          </div>
+          <input class="record-title-input" type="text" value="结果期" placeholder="阶段名称" />
+          <textarea class="record-desc-input" placeholder="阶段描述">果实进入膨大稳定阶段，已补充果径、挂果数量、土壤湿度和现场照片，用户扫码后可直接看到该阶段内容。</textarea>
+          <div class="metric-row">
+            <div class="metric-box">
+              <span>平均果径</span>
+              <input class="metric-input" type="text" value="7.4 cm" placeholder="数值" />
+            </div>
+            <div class="metric-box">
+              <span>挂果数量</span>
+              <input class="metric-input" type="text" value="32 个" placeholder="数值" />
+            </div>
+            <div class="metric-box">
+              <span>土壤湿度</span>
+              <input class="metric-input" type="text" value="63%" placeholder="数值" />
+            </div>
+          </div>
+          <div class="upload-list">
+            <img class="upload-item" src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?auto=format&fit=crop&w=400&q=80" alt="结果期图片1" />
+            <img class="upload-item" src="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=400&q=80" alt="结果期图片2" />
+            <div class="upload-add">+</div>
+          </div>
+          <div class="record-actions">
+            <button class="mini-btn-primary" type="button">编辑本阶段</button>
+            <button class="mini-btn" type="button">上传图片</button>
+            <button class="mini-btn" type="button">隐藏展示</button>
+          </div>
+        </div>
+
+        <div class="record-item">
+          <div class="record-top">
+            <div class="record-meta">记录时间：2026-03-02 · 包含施肥 / 驱虫 / 浇水</div>
+            <div class="record-tag">已归档</div>
+          </div>
+          <input class="record-title-input" type="text" value="养护期" placeholder="阶段名称" />
+          <textarea class="record-desc-input" placeholder="阶段描述">本阶段已登记春季养护动作，适合补充文字说明、养护图片和测量数据，展示整棵果树的真实成长过程。</textarea>
+          <div class="metric-row">
+            <div class="metric-box">
+              <span>施肥量</span>
+              <input class="metric-input" type="text" value="3.2 kg" placeholder="数值" />
+            </div>
+            <div class="metric-box">
+              <span>浇水量</span>
+              <input class="metric-input" type="text" value="28 L" placeholder="数值" />
+            </div>
+            <div class="metric-box">
+              <span>虫害评估</span>
+              <input class="metric-input" type="text" value="低风险" placeholder="数值" />
+            </div>
+          </div>
+          <div class="upload-list">
+            <img class="upload-item" src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=400&q=80" alt="养护期图片1" />
+            <img class="upload-item" src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=400&q=80" alt="养护期图片2" />
+            <div class="upload-add">+</div>
+          </div>
+          <div class="record-actions">
+            <button class="mini-btn-primary" type="button">编辑本阶段</button>
+            <button class="mini-btn" type="button">上传图片</button>
+            <button class="mini-btn-danger" type="button">删除记录</button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="mini-btn-primary" type="button" id="openStagePopup">新增阶段记录</button>
+          <button class="mini-btn" type="button">批量上传</button>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div class="card-title">二维码与预览</div>
+        <div class="qr-box">
+          <div class="qr-card">
+            <div class="fake-qr" aria-hidden="true"></div>
+            <p>二维码可根据果树编号或详情页地址生成，普通用户扫码后进入详情页，仅查看公开档案内容。</p>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="mini-btn-primary" type="button">生成二维码</button>
+          <button class="mini-btn" type="button">预览详情页</button>
+          <button class="mini-btn-danger" type="button">删除果树</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-box">
+      <button class="footer-btn-primary" type="button" style="flex: 1;">保存并发布</button>
+    </div>
+
+    <div class="stage-overlay" id="stagePopup">
+      <div class="stage-popup">
+        <div class="stage-popup-title">新增阶段记录</div>
+        <div class="stage-popup-body">
+          <label>
+            <span class="field-label">阶段名称</span>
+            <input class="popup-input" type="text" id="popupStageName" placeholder="如：施肥、驱虫、浇水、长花苞、结果、摘果" />
+          </label>
+          <label>
+            <span class="field-label">阶段描述</span>
+            <textarea class="popup-textarea" id="popupStageDesc" placeholder="填写本阶段的文字说明"></textarea>
+          </label>
+          <div class="field-label">测量数据（选填）</div>
+          <div class="metric-row">
+            <div class="metric-box">
+              <span>指标一</span>
+              <input class="metric-input" type="text" id="popupMetric1" placeholder="如：7.4 cm" />
+            </div>
+            <div class="metric-box">
+              <span>指标二</span>
+              <input class="metric-input" type="text" id="popupMetric2" placeholder="如：32 个" />
+            </div>
+            <div class="metric-box">
+              <span>指标三</span>
+              <input class="metric-input" type="text" id="popupMetric3" placeholder="如：63%" />
+            </div>
+          </div>
+        </div>
+        <div class="stage-popup-footer">
+          <button class="footer-btn" type="button" id="closeStagePopup">取消</button>
+          <button class="footer-btn-primary" type="button" id="confirmStagePopup">确定</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var overlay = document.getElementById('stagePopup');
+      var openBtn = document.getElementById('openStagePopup');
+      var closeBtn = document.getElementById('closeStagePopup');
+      var confirmBtn = document.getElementById('confirmStagePopup');
+
+      function openPopup() {
+        overlay.classList.add('show');
+      }
+
+      function closePopup() {
+        overlay.classList.remove('show');
+      }
+
+      openBtn.addEventListener('click', openPopup);
+      closeBtn.addEventListener('click', closePopup);
+      confirmBtn.addEventListener('click', function () {
+        closePopup();
+      });
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closePopup();
+      });
+    })();
+  </script>
+</body>
+</html>

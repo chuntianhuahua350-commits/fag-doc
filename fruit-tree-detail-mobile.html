@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>果树生长档案</title>
+  <style>
+    :root {
+      --bg: #f4f8f2;
+      --card: rgba(255, 255, 255, 0.9);
+      --card-strong: #ffffff;
+      --text: #183326;
+      --subtext: #64806f;
+      --primary: #2fa36b;
+      --primary-deep: #1e7c50;
+      --line: rgba(47, 163, 107, 0.14);
+      --warning: #f3a93b;
+      --danger: #ee6d5c;
+      --shadow: 0 18px 40px rgba(26, 77, 50, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(116, 210, 154, 0.18), transparent 28%),
+        linear-gradient(180deg, #eef8ef 0%, var(--bg) 45%, #edf3ee 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 18px 16px 32px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 22px 20px 20px;
+      border-radius: 30px;
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0)),
+        linear-gradient(135deg, #2cab69 0%, #3dbd7b 44%, #6dd18f 100%);
+      box-shadow: 0 22px 44px rgba(47, 163, 107, 0.28);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .hero::before {
+      width: 150px;
+      height: 150px;
+      right: -35px;
+      top: -48px;
+    }
+
+    .hero::after {
+      width: 110px;
+      height: 110px;
+      right: 48px;
+      bottom: -45px;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(24, 51, 38, 0.16);
+    }
+
+    .hero-status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #d9ffe6;
+      box-shadow: 0 0 0 4px rgba(217, 255, 230, 0.18);
+    }
+
+    .hero h1 {
+      margin: 18px 0 8px;
+      font-size: 30px;
+      line-height: 1.15;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-subtitle {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.86);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-stat {
+      padding: 12px 10px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+
+    .hero-stat span {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .hero-adopt-bar {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-adopt-tag {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .hero-adopt-tag.adopted {
+      background: rgba(24, 51, 38, 0.25);
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .hero-adopt-desc {
+      display: block;
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.5;
+    }
+
+    .section {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .section-title span {
+      font-size: 12px;
+      color: var(--subtext);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .info-item {
+      padding: 14px;
+      border-radius: var(--radius-md);
+      background: var(--card-strong);
+      border: 1px solid var(--line);
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--subtext);
+    }
+
+    .value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--primary-deep);
+      background: rgba(47, 163, 107, 0.1);
+      border: 1px solid rgba(47, 163, 107, 0.16);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .metric-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #f6fbf7 100%);
+      border: 1px solid var(--line);
+    }
+
+    .metric-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 24px;
+      color: var(--primary-deep);
+    }
+
+    .metric-card small {
+      font-size: 12px;
+      color: var(--subtext);
+    }
+
+    .timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 16px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(47, 163, 107, 0.28), rgba(47, 163, 107, 0.06));
+    }
+
+    .stage {
+      position: relative;
+      margin-left: 10px;
+      padding-left: 26px;
+    }
+
+    .stage::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      border: 4px solid var(--primary);
+      box-shadow: 0 0 0 5px rgba(47, 163, 107, 0.1);
+    }
+
+    .stage-card {
+      overflow: hidden;
+      border-radius: 24px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 32px rgba(24, 51, 38, 0.06);
+    }
+
+    .stage-cover {
+      height: 156px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .stage-content {
+      padding: 16px;
+    }
+
+    .stage-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .stage-head h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .stage-date {
+      font-size: 12px;
+      color: var(--subtext);
+    }
+
+    .stage-desc {
+      margin: 0 0 12px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #53695d;
+    }
+
+    .stage-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .stage-tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: #f4faf5;
+      color: var(--primary-deep);
+    }
+
+    .stage-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .stage-metric {
+      padding: 10px 8px;
+      border-radius: 14px;
+      text-align: center;
+      background: #f8fbf8;
+      border: 1px solid rgba(47, 163, 107, 0.08);
+    }
+
+    .stage-metric b {
+      display: block;
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    .stage-metric span {
+      font-size: 11px;
+      color: var(--subtext);
+    }
+
+    .album {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .album-item {
+      height: 86px;
+      border-radius: 16px;
+      background-size: cover;
+      background-position: center;
+      box-shadow: inset 0 -30px 40px rgba(24, 51, 38, 0.08);
+    }
+
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(243, 169, 59, 0.09);
+      color: #825d1d;
+    }
+
+    .notice-mark {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: #fff;
+      background: var(--warning);
+    }
+
+    .footer-action {
+      position: sticky;
+      bottom: 18px;
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 18px 36px rgba(21, 43, 31, 0.08);
+    }
+
+    .button {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 18px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary-deep), var(--primary));
+      box-shadow: 0 14px 24px rgba(47, 163, 107, 0.24);
+    }
+
+    .muted {
+      margin-top: 10px;
+      font-size: 12px;
+      text-align: center;
+      color: var(--subtext);
+    }
+
+    @media (max-width: 360px) {
+      .hero-stats,
+      .metrics,
+      .info-grid,
+      .stage-metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .album {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-top">
+        <span class="hero-tag">果树成长档案</span>
+        <span class="hero-status">当前状态：挂果稳定期</span>
+      </div>
+      <h1>阳光红富士苹果树</h1>
+      <p class="hero-subtitle">
+        编号 A-03-12 · 果园东二区 · 认植年价 ¥299/年
+      </p>
+      <div class="hero-adopt-bar">
+        <span class="hero-adopt-tag adopted">已被认植</span>
+        <span class="hero-adopt-desc">其他用户扫码可查看完整种植档案，无法认植</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong>4 年</strong>
+          <span>树龄</span>
+        </div>
+        <div class="hero-stat">
+          <strong>12 次</strong>
+          <span>养护记录</span>
+        </div>
+        <div class="hero-stat">
+          <strong>86%</strong>
+          <span>生长健康度</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>测量数据</h2>
+        <span>可按周期持续补录</span>
+      </div>
+      <div class="metrics">
+        <div class="metric-card">
+          <small>当前树高</small>
+          <strong>2.46 m</strong>
+          <small>较上次 +0.08m</small>
+        </div>
+        <div class="metric-card">
+          <small>冠幅直径</small>
+          <strong>1.92 m</strong>
+          <small>长势均衡</small>
+        </div>
+        <div class="metric-card">
+          <small>土壤湿度</small>
+          <strong>63%</strong>
+          <small>适宜</small>
+        </div>
+        <div class="metric-card">
+          <small>预计产果量</small>
+          <strong>38 kg</strong>
+          <small>本季预测</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>成长阶段记录</h2>
+        <span>按时间倒序展示</span>
+      </div>
+      <div class="timeline">
+        <article class="stage">
+          <div class="stage-card">
+            <div class="stage-cover" style="background-image: url('https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=900&q=80');"></div>
+            <div class="stage-content">
+              <div class="stage-head">
+                <h3>结果期</h3>
+                <span class="stage-date">2026-08-03</span>
+              </div>
+              <p class="stage-desc">
+                果实已进入膨大稳定阶段，颜色均匀，整体挂果状态良好，需要继续关注枝条承重与水分供给。
+              </p>
+              <div class="stage-tags">
+                <span class="stage-tag">挂果</span>
+                <span class="stage-tag">控水管理</span>
+                <span class="stage-tag">枝条支撑</span>
+              </div>
+              <div class="stage-metrics">
+                <div class="stage-metric">
+                  <b>7.4 cm</b>
+                  <span>平均果径</span>
+                </div>
+                <div class="stage-metric">
+                  <b>32 个</b>
+                  <span>挂果数量</span>
+                </div>
+                <div class="stage-metric">
+                  <b>82%</b>
+                  <span>成熟度</span>
+                </div>
+              </div>
+              <div class="album">
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&w=600&q=80');"></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="stage">
+          <div class="stage-card">
+            <div class="stage-cover" style="background-image: url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=900&q=80');"></div>
+            <div class="stage-content">
+              <div class="stage-head">
+                <h3>长花苞期</h3>
+                <span class="stage-date">2026-04-18</span>
+              </div>
+              <p class="stage-desc">
+                花苞数量增长明显，枝梢颜色健康，处于关键营养补给阶段，适合追加一次微量元素补充。
+              </p>
+              <div class="stage-tags">
+                <span class="stage-tag">长花苞</span>
+                <span class="stage-tag">叶面营养</span>
+                <span class="stage-tag">花量评估</span>
+              </div>
+              <div class="stage-metrics">
+                <div class="stage-metric">
+                  <b>46 个</b>
+                  <span>花苞数量</span>
+                </div>
+                <div class="stage-metric">
+                  <b>18 cm</b>
+                  <span>新梢长度</span>
+                </div>
+                <div class="stage-metric">
+                  <b>74%</b>
+                  <span>叶色指数</span>
+                </div>
+              </div>
+              <div class="album">
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=600&q=80');"></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="stage">
+          <div class="stage-card">
+            <div class="stage-cover" style="background-image: url('https://images.unsplash.com/photo-1461354464878-ad92f492a5a0?auto=format&fit=crop&w=900&q=80');"></div>
+            <div class="stage-content">
+              <div class="stage-head">
+                <h3>养护期</h3>
+                <span class="stage-date">2026-03-02</span>
+              </div>
+              <p class="stage-desc">
+                已完成春季施肥、驱虫和浇水基础养护，树盘环境整洁，根部周围土壤疏松度较好。
+              </p>
+              <div class="stage-tags">
+                <span class="stage-tag">施肥</span>
+                <span class="stage-tag">驱虫</span>
+                <span class="stage-tag">浇水</span>
+              </div>
+              <div class="stage-metrics">
+                <div class="stage-metric">
+                  <b>3.2 kg</b>
+                  <span>施肥量</span>
+                </div>
+                <div class="stage-metric">
+                  <b>28 L</b>
+                  <span>浇水量</span>
+                </div>
+                <div class="stage-metric">
+                  <b>低风险</b>
+                  <span>虫害评估</span>
+                </div>
+              </div>
+              <div class="album">
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80');"></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="stage">
+          <div class="stage-card">
+            <div class="stage-cover" style="background-image: url('https://images.unsplash.com/photo-1420574443842-45d9bc1e2719?auto=format&fit=crop&w=900&q=80');"></div>
+            <div class="stage-content">
+              <div class="stage-head">
+                <h3>摘果期</h3>
+                <span class="stage-date">2025-10-14</span>
+              </div>
+              <p class="stage-desc">
+                上一季采摘完成后已完成枝叶修整，本阶段主要用于回顾采摘品质、单树产量和下一季养护规划。
+              </p>
+              <div class="stage-tags">
+                <span class="stage-tag">摘果</span>
+                <span class="stage-tag">产量归档</span>
+                <span class="stage-tag">品质评估</span>
+              </div>
+              <div class="stage-metrics">
+                <div class="stage-metric">
+                  <b>41 kg</b>
+                  <span>单树产量</span>
+                </div>
+                <div class="stage-metric">
+                  <b>93%</b>
+                  <span>优果率</span>
+                </div>
+                <div class="stage-metric">
+                  <b>4.8 / 5</b>
+                  <span>品质评分</span>
+                </div>
+              </div>
+              <div class="album">
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1471943311424-646960669fbc?auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="album-item" style="background-image: url('https://images.unsplash.com/photo-1500051638674-ff996a0ec29e?auto=format&fit=crop&w=600&q=80');"></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- <section class="section">
+      <div class="section-title">
+        <h2>养护提醒</h2>
+        <span>结合当前状态生成</span>
+      </div>
+      <div class="notice">
+        <div class="notice-mark">!</div>
+        <div>
+          预计一周后进入下一轮果面着色观察期，建议补拍近景照片并记录平均果径、单枝挂果数和土壤湿度。
+        </div>
+      </div>
+    </section> -->
+
+    <!-- 未认植时本区域显示「我要认植」按钮，跳转认植申请页 -->
+    <div class="muted" style="margin-top: 20px; padding: 0 8px;">
+      未认植时：顶部显示认植年价与「我要认植」按钮 → <a href="./fruit-tree-adopt-apply-mobile.html">认植申请页</a>
+    </div>
+  </main>
+</body>
+</html>

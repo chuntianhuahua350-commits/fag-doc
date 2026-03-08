@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>我的果树</title>
+  <style>
+    :root {
+      --primary: #2fb168;
+      --primary-deep: #23824d;
+      --primary-light: #eaf9f1;
+      --grey: #8f9a94;
+      --dark: #26342c;
+      --line: #edf0ee;
+      --shadow: 0 10px 30px rgba(24, 39, 29, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef8ef 0%, #f7f8f7 120px, #f7f8f7 100%);
+      color: var(--dark);
+    }
+    .page { max-width: 430px; min-height: 100vh; margin: 0 auto; padding: 0 14px 24px; }
+    .nav {
+      height: 92px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1c2e23;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(238, 248, 239, 0.96), rgba(238, 248, 239, 0.72), rgba(238, 248, 239, 0));
+      backdrop-filter: blur(10px);
+    }
+    .nav .back {
+      position: absolute;
+      left: 0;
+      bottom: 11px;
+      width: 38px;
+      height: 38px;
+      border-radius: 38px;
+      border: 1px solid rgba(47, 177, 104, 0.15);
+      background: rgba(255, 255, 255, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-deep);
+      font-size: 18px;
+    }
+    .list-box { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); }
+    .list-item {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .list-item:last-child { border-bottom: none; }
+    .list-item img {
+      width: 88px;
+      height: 76px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #eef1ef;
+      flex: 0 0 auto;
+    }
+    .list-item-content { flex: 1; min-width: 0; }
+    .tree-name { font-size: 16px; font-weight: 700; color: #223028; margin-bottom: 6px; }
+    .tree-meta { font-size: 12px; color: var(--grey); line-height: 1.6; }
+    .tree-status {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary-deep);
+      background: var(--primary-light);
+    }
+    .list-item-arrow {
+      flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--grey);
+      font-size: 14px;
+    }
+    .empty {
+      padding: 48px 20px;
+      text-align: center;
+      color: var(--grey);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .empty a { color: var(--primary-deep); text-decoration: none; }
+    .link-note { margin-top: 14px; text-align: center; font-size: 12px; color: var(--grey); }
+    .link-note a { color: var(--primary-deep); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="nav">
+      <div class="back">&#x2039;</div>
+      我的果树
+    </div>
+
+    <section class="list-box">
+      <a href="./fruit-tree-detail-mobile.html" style="text-decoration: none; color: inherit;" class="list-item">
+        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=400&q=80" alt="红富士苹果树" />
+        <div class="list-item-content">
+          <div class="tree-name">红富士苹果树</div>
+          <div class="tree-meta">编号 A-03-12 · 东二区 12 号垄</div>
+          <div class="tree-meta">认植至 2029-03-06</div>
+          <span class="tree-status">挂果中</span>
+        </div>
+        <div class="list-item-arrow">&#x203A;</div>
+      </a>
+    </section>
+
+    <div class="link-note">
+      仅展示已通过审核的认植果树 · 订单记录请到 <a href="./fruit-tree-my-orders-mobile.html">我的果树认植订单</a>
+    </div>
+  </main>
+</body>
+</html>
