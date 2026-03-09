@@ -82,6 +82,33 @@
       color: var(--primary-deep);
       background: var(--primary-light);
     }
+    .visibility-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .visibility-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--grey);
+      cursor: pointer;
+    }
+    .visibility-btn.active-public {
+      background: var(--primary-light);
+      color: var(--primary-deep);
+      border-color: rgba(47, 177, 104, 0.35);
+    }
+    .visibility-btn.active-hidden {
+      background: #f5f5f5;
+      color: #5d6b64;
+      border-color: #e0e0e0;
+    }
     .list-item-arrow {
       flex: 0 0 auto;
       width: 24px;
@@ -112,21 +139,58 @@
     </div>
 
     <section class="list-box">
-      <a href="./fruit-tree-detail-mobile.html" style="text-decoration: none; color: inherit;" class="list-item">
-        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=400&q=80" alt="红富士苹果树" />
-        <div class="list-item-content">
-          <div class="tree-name">红富士苹果树</div>
-          <div class="tree-meta">编号 A-03-12 · 东二区 12 号垄</div>
-          <div class="tree-meta">认植至 2029-03-06</div>
-          <span class="tree-status">挂果中</span>
-        </div>
-        <div class="list-item-arrow">&#x203A;</div>
-      </a>
+      <div class="list-item">
+        <a href="./fruit-tree-detail-mobile.html" style="flex:1;display:flex;align-items:center;gap:14px;min-width:0;text-decoration:none;color:inherit;">
+          <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=400&q=80" alt="红富士苹果树" />
+          <div class="list-item-content">
+            <div class="tree-name">红富士苹果树</div>
+            <div class="tree-meta">编号 A-03-12 · 东二区 12 号垄</div>
+            <div class="tree-meta">认植至 2029-03-06</div>
+            <span class="tree-status">挂果中</span>
+            <div class="visibility-bar">
+              <span style="font-size:11px;color:var(--grey);">他人查看：</span>
+              <span class="visibility-btn active-public" data-tree="apple" data-visibility="public" title="当前公开，他人可见完整档案">公开信息</span>
+              <span class="visibility-btn" data-tree="apple" data-visibility="hidden" title="当前隐藏，他人仅见基础信息">隐藏信息</span>
+            </div>
+          </div>
+        </a>
+        <a href="./fruit-tree-detail-mobile.html" class="list-item-arrow" style="text-decoration:none;color:inherit;">&#x203A;</a>
+      </div>
+      <div class="list-item">
+        <a href="./fruit-tree-detail-mobile.html?visibility=hidden" style="flex:1;display:flex;align-items:center;gap:14px;min-width:0;text-decoration:none;color:inherit;">
+          <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=400&q=80" alt="翠冠梨树" />
+          <div class="list-item-content">
+            <div class="tree-name">翠冠梨树</div>
+            <div class="tree-meta">编号 B-01-08 · 南一区 8 号垄</div>
+            <div class="tree-meta">认植至 2028-06-01</div>
+            <span class="tree-status">长花苞</span>
+            <div class="visibility-bar">
+              <span style="font-size:11px;color:var(--grey);">他人查看：</span>
+              <span class="visibility-btn" data-tree="pear" data-visibility="public" title="设为公开">公开信息</span>
+              <span class="visibility-btn active-hidden" data-tree="pear" data-visibility="hidden" title="当前隐藏">隐藏信息</span>
+            </div>
+          </div>
+        </a>
+        <a href="./fruit-tree-detail-mobile.html?visibility=hidden" class="list-item-arrow" style="text-decoration:none;color:inherit;">&#x203A;</a>
+      </div>
     </section>
 
     <div class="link-note">
-      仅展示已通过审核的认植果树 · 订单记录请到 <a href="./fruit-tree-my-orders-mobile.html">我的果树认植订单</a>
+      公开信息：他人扫码可见完整档案；隐藏信息：他人仅见基础信息。本人进入详情始终可见完整内容。<br />
+      <a href="./fruit-tree-detail-mobile.html?visibility=hidden">详情页（隐藏模式预览）</a> ·
+      订单记录请到 <a href="./fruit-tree-my-orders-mobile.html">我的果树认植订单</a>
     </div>
   </main>
+  <script>
+    document.querySelectorAll('.visibility-btn').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        var bar = this.closest('.visibility-bar');
+        if (!bar) return;
+        bar.querySelectorAll('.visibility-btn').forEach(function(b){ b.classList.remove('active-public', 'active-hidden'); });
+        this.classList.add(this.getAttribute('data-visibility') === 'public' ? 'active-public' : 'active-hidden');
+      });
+    });
+  </script>
 </body>
 </html>

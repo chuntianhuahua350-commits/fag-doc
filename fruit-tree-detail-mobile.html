@@ -470,6 +470,19 @@
       color: var(--subtext);
     }
 
+    .visibility-hidden-notice {
+      margin-top: 18px;
+      padding: 20px 18px;
+      border-radius: var(--radius-lg);
+      background: rgba(144, 154, 148, 0.12);
+      border: 1px solid rgba(144, 154, 148, 0.2);
+      text-align: center;
+      font-size: 14px;
+      color: var(--subtext);
+      line-height: 1.6;
+    }
+    .visibility-hidden-notice strong { color: var(--text); }
+
     @media (max-width: 360px) {
       .hero-stats,
       .metrics,
@@ -516,7 +529,12 @@
       </div>
     </section>
 
-    <section class="section">
+    <div id="visibilityHiddenNotice" class="visibility-hidden-notice" style="display: none;">
+      <strong>认植者已设置不公开详细信息</strong><br />
+      该果树的测量数据与成长阶段记录仅对认植者本人可见。
+    </div>
+
+    <section class="section" id="sectionMetrics">
       <div class="section-title">
         <h2>测量数据</h2>
         <span>可按周期持续补录</span>
@@ -545,7 +563,7 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="sectionTimeline">
       <div class="section-title">
         <h2>成长阶段记录</h2>
         <span>按时间倒序展示</span>
@@ -723,9 +741,22 @@
     </section> -->
 
     <!-- 未认植时本区域显示「我要认植」按钮，跳转认植申请页 -->
-    <div class="muted" style="margin-top: 20px; padding: 0 8px;">
+    <div class="muted" id="mutedNote" style="margin-top: 20px; padding: 0 8px;">
       未认植时：顶部显示认植年价与「我要认植」按钮 → <a href="./fruit-tree-adopt-apply-mobile.html">认植申请页</a>
     </div>
   </main>
+  <script>
+    (function(){
+      var params = new URLSearchParams(location.search);
+      if (params.get('visibility') === 'hidden') {
+        var notice = document.getElementById('visibilityHiddenNotice');
+        var metrics = document.getElementById('sectionMetrics');
+        var timeline = document.getElementById('sectionTimeline');
+        if (notice) notice.style.display = 'block';
+        if (metrics) metrics.style.display = 'none';
+        if (timeline) timeline.style.display = 'none';
+      }
+    })();
+  </script>
 </body>
 </html>
