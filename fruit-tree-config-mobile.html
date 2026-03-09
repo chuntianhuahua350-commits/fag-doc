@@ -387,6 +387,14 @@
       gap: 8px;
     }
 
+    .record-order {
+      display: flex;
+      gap: 6px;
+      margin-right: auto;
+    }
+
+    .record-order .mini-btn { min-width: 56px; }
+
     .qr-box {
       padding: 16px;
     }
@@ -604,6 +612,14 @@
           <div class="field-value">东二区 12 号垄</div>
         </div>
         <div class="field-row">
+          <div class="field-label">所属农户</div>
+          <div class="field-value"><strong>东区果园 张师傅</strong> <span style="font-size:12px;color:var(--grey);">（下拉选择）</span></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">农户信息</div>
+          <div class="field-value" style="text-align:left;">联系人 张师傅 · 电话 138****1234 · 微信商户 已绑定</div>
+        </div>
+        <div class="field-row">
           <div class="field-label">认植年价（元/年）</div>
           <div class="field-value"><strong>299</strong></div>
         </div>
@@ -643,6 +659,8 @@
             <div class="upload-add">+</div>
           </div>
           <div class="record-actions">
+            <button class="mini-btn" type="button" data-toast="上移（原型演示）">上移</button>
+            <button class="mini-btn" type="button" data-toast="下移（原型演示）">下移</button>
             <button class="mini-btn-primary" type="button" data-toast="已保存本阶段修改（原型演示）">编辑本阶段</button>
             <button class="mini-btn" type="button" data-toast="请选择图片上传（原型演示）">上传图片</button>
             <button class="mini-btn" type="button" data-toast="已隐藏该阶段展示（原型演示）">隐藏展示</button>
@@ -676,6 +694,8 @@
             <div class="upload-add">+</div>
           </div>
           <div class="record-actions">
+            <button class="mini-btn" type="button" data-toast="上移（原型演示）">上移</button>
+            <button class="mini-btn" type="button" data-toast="下移（原型演示）">下移</button>
             <button class="mini-btn-primary" type="button" data-toast="已保存本阶段修改（原型演示）">编辑本阶段</button>
             <button class="mini-btn" type="button" data-toast="请选择图片上传（原型演示）">上传图片</button>
             <button class="mini-btn-danger" type="button" data-toast="已删除该阶段记录（原型演示）">删除记录</button>

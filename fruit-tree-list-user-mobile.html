@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>果树列表（用户端）</title>
+  <style>
+    :root {
+      --primary: #2fb168;
+      --primary-deep: #23824d;
+      --primary-light: #eaf9f1;
+      --grey: #8f9a94;
+      --dark: #26342c;
+      --line: #edf0ee;
+      --shadow: 0 10px 30px rgba(24, 39, 29, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef8ef 0%, #f7f8f7 180px, #f7f8f7 100%);
+      color: var(--dark);
+    }
+    .page { max-width: 430px; min-height: 100vh; margin: 0 auto; padding: 0 14px 24px; }
+    .nav {
+      height: 92px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1c2e23;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(238, 248, 239, 0.96), rgba(238, 248, 239, 0.72), rgba(238, 248, 239, 0));
+      backdrop-filter: blur(10px);
+    }
+    .nav .back {
+      position: absolute;
+      left: 0;
+      bottom: 11px;
+      width: 38px;
+      height: 38px;
+      border-radius: 38px;
+      border: 1px solid rgba(47, 177, 104, 0.15);
+      background: rgba(255, 255, 255, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-deep);
+      font-size: 18px;
+    }
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .filter-row select {
+      flex: 1;
+      height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      font-size: 14px;
+      color: var(--dark);
+    }
+    .list-box {
+      background: #fff;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .list-item-box {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .list-item-box:last-child { border-bottom: none; }
+    .space-between { display: flex; justify-content: space-between; }
+    .align-items { display: flex; align-items: center; }
+    .mb12 { margin-bottom: 12px; }
+    .meta-label { color: var(--grey); font-size: 12px; }
+    .meta-value { color: var(--dark); font-size: 13px; font-weight: 600; }
+    .status { font-size: 13px; font-weight: 600; }
+    .status.green { color: var(--primary); }
+    .status.orange { color: #f0a63b; }
+    .status.red { color: #e95f5f; }
+    .tree-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .icon-img {
+      width: 96px;
+      height: 84px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #eef1ef;
+      flex: 0 0 auto;
+    }
+    .icon-content { width: calc(100% - 108px); }
+    .tree-name { font-size: 16px; font-weight: 700; color: #223028; margin-bottom: 8px; }
+    .tree-line { font-size: 12px; color: var(--grey); line-height: 1.7; margin-bottom: 4px; }
+    .tree-line strong { color: #44544a; font-weight: 600; }
+    .action-bar { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; }
+    .mini-btn, .mini-btn-primary {
+      min-width: 76px;
+      height: 34px;
+      padding: 0 14px;
+      border-radius: 34px;
+      font-size: 12px;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .mini-btn {
+      color: #5d6b64;
+      background: #f5f6f5;
+      border: 1px solid #ebefec;
+    }
+    .mini-btn-primary { color: #fff; background: var(--primary); }
+    .empty-tip { padding: 18px; color: var(--grey); text-align: center; font-size: 12px; }
+    .link-note { margin-top: 14px; text-align: center; font-size: 12px; color: var(--grey); }
+    .link-note a { color: var(--primary-deep); text-decoration: none; }
+    .toast { position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%); padding: 12px 20px; background: rgba(0,0,0,0.75); color: #fff; border-radius: 24px; font-size: 14px; z-index: 300; display: none; }
+    .toast.show { display: block; }
+    .overlay { display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+    .overlay.show { display: flex; }
+    .modal { width: 100%; max-width: 340px; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+    .modal-title { padding: 16px; font-size: 16px; font-weight: 700; border-bottom: 1px solid var(--line); }
+    .modal-body { padding: 16px; font-size: 13px; line-height: 1.7; color: var(--dark); }
+    .modal-footer { display: flex; border-top: 1px solid var(--line); }
+    .modal-footer button { flex: 1; height: 48px; border: none; font-size: 15px; background: #fff; color: var(--grey); cursor: pointer; }
+    .history-item { border-left: 2px solid var(--primary); padding-left: 12px; margin-bottom: 16px; }
+    .history-item:last-of-type { margin-bottom: 0; }
+    .history-item-img { width: 100%; max-width: 200px; height: 120px; object-fit: cover; border-radius: 10px; margin: 8px 0 6px; background: #eef1ef; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="nav">
+      <a href="index.html" class="back" style="text-decoration:none;color:inherit;">&#x2039;</a>
+      果树列表
+    </div>
+
+    <div class="filter-row">
+      <select id="filterFarmer" title="按农户筛选">
+        <option value="">全部农户</option>
+        <option value="东区">东区果园 张师傅</option>
+        <option value="南园">南园 李农户</option>
+        <option value="北区">北区葡萄园 王师傅</option>
+        <option value="西园">西园 赵农户</option>
+      </select>
+      <select id="filterStatus" title="按状态筛选">
+        <option value="">全部状态</option>
+        <option value="挂果中">挂果中</option>
+        <option value="长花苞">长花苞</option>
+        <option value="养护中">养护中</option>
+        <option value="待完善">待完善</option>
+      </select>
+    </div>
+
+    <section class="list-box" id="listBox">
+      <article class="list-item-box" data-farmer="东区" data-status="挂果中">
+        <div class="space-between align-items mb12">
+          <div class="align-items">
+            <span class="meta-label">编号：</span>
+            <span class="meta-value">A-03-12</span>
+          </div>
+          <div class="status green">挂果中</div>
+        </div>
+        <div class="tree-content">
+          <img class="icon-img" src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=800&q=80" alt="红富士苹果树" />
+          <div class="icon-content">
+            <div class="tree-name">红富士苹果树</div>
+            <div class="tree-line">东二区 12 号垄 · 东区果园 张师傅</div>
+            <div class="tree-line"><strong>认植年价：</strong>¥ 299/年 · <span class="status green">已认植</span></div>
+          </div>
+        </div>
+        <div class="action-bar">
+          <a href="fruit-tree-detail-mobile.html" class="mini-btn">查看详情</a>
+          <button class="mini-btn btn-history" type="button" data-name="红富士苹果树">种植历史</button>
+        </div>
+      </article>
+
+      <article class="list-item-box" data-farmer="南园" data-status="长花苞">
+        <div class="space-between align-items mb12">
+          <div class="align-items">
+            <span class="meta-label">编号：</span>
+            <span class="meta-value">B-01-08</span>
+          </div>
+          <div class="status orange">长花苞</div>
+        </div>
+        <div class="tree-content">
+          <img class="icon-img" src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=80" alt="翠冠梨树" />
+          <div class="icon-content">
+            <div class="tree-name">翠冠梨树</div>
+            <div class="tree-line">南一区 8 号垄 · 南园 李农户</div>
+            <div class="tree-line"><strong>认植年价：</strong>¥ 199/年 · <span class="meta-label">未认植</span></div>
+          </div>
+        </div>
+        <div class="action-bar">
+          <a href="fruit-tree-detail-mobile.html" class="mini-btn">查看详情</a>
+          <a href="fruit-tree-adopt-apply-mobile.html" class="mini-btn-primary">我要认植</a>
+          <button class="mini-btn btn-history" type="button" data-name="翠冠梨树">种植历史</button>
+        </div>
+      </article>
+
+      <article class="list-item-box" data-farmer="北区" data-status="待完善">
+        <div class="space-between align-items mb12">
+          <div class="align-items">
+            <span class="meta-label">编号：</span>
+            <span class="meta-value">C-05-21</span>
+          </div>
+          <div class="status red">待完善</div>
+        </div>
+        <div class="tree-content">
+          <img class="icon-img" src="https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&w=800&q=80" alt="阳光玫瑰葡萄树" />
+          <div class="icon-content">
+            <div class="tree-name">阳光玫瑰葡萄树</div>
+            <div class="tree-line">北三区 21 号棚 · 北区葡萄园 王师傅</div>
+            <div class="tree-line"><strong>认植年价：</strong>¥ 399/年 · <span class="meta-label">未认植</span></div>
+          </div>
+        </div>
+        <div class="action-bar">
+          <a href="fruit-tree-detail-mobile.html" class="mini-btn">查看详情</a>
+          <a href="fruit-tree-adopt-apply-mobile.html" class="mini-btn-primary">我要认植</a>
+          <button class="mini-btn btn-history" type="button" data-name="阳光玫瑰葡萄树">种植历史</button>
+        </div>
+      </article>
+
+      <article class="list-item-box" data-farmer="西园" data-status="养护中">
+        <div class="space-between align-items mb12">
+          <div class="align-items">
+            <span class="meta-label">编号：</span>
+            <span class="meta-value">D-02-15</span>
+          </div>
+          <div class="status green">养护中</div>
+        </div>
+        <div class="tree-content">
+          <img class="icon-img" src="https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=800&q=80" alt="蜜桃树" />
+          <div class="icon-content">
+            <div class="tree-name">蜜桃树</div>
+            <div class="tree-line">西一区 15 号垄 · 西园 赵农户</div>
+            <div class="tree-line"><strong>认植年价：</strong>¥ 259/年 · <span class="meta-label">未认植</span></div>
+          </div>
+        </div>
+        <div class="action-bar">
+          <a href="fruit-tree-detail-mobile.html" class="mini-btn">查看详情</a>
+          <a href="fruit-tree-adopt-apply-mobile.html" class="mini-btn-primary">我要认植</a>
+          <button class="mini-btn btn-history" type="button" data-name="蜜桃树">种植历史</button>
+        </div>
+      </article>
+
+      <div class="empty-tip">下拉可继续加载更多</div>
+    </section>
+
+    <div class="toast" id="toast"></div>
+    <div class="overlay" id="overlayHistory">
+      <div class="modal" style="max-height:85vh;overflow:hidden;display:flex;flex-direction:column;">
+        <div class="modal-title" id="historyModalTitle">种植历史</div>
+        <div class="modal-body" id="historyModalBody" style="text-align:left;overflow-y:auto;flex:1;max-height:60vh;">
+          <p style="margin:0 0 12px;font-size:13px;color:var(--grey);">按时间倒序</p>
+          <div class="history-item">
+            <strong>2026-08-03 结果期</strong>
+            <img class="history-item-img" src="https://images.unsplash.com/photo-1560807707-8cc77767d783?auto=format&fit=crop&w=600&q=80" alt="结果期阶段图" />
+            <p style="margin:6px 0;font-size:13px;">果实膨大稳定阶段，果径、挂果数、土壤湿度已记录。</p>
+            <span style="font-size:12px;color:var(--grey);">平均果径 7.4cm · 挂果 32 个 · 土壤湿度 63%</span>
+          </div>
+          <div class="history-item">
+            <strong>2026-03-02 养护期</strong>
+            <img class="history-item-img" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=600&q=80" alt="养护期阶段图" />
+            <p style="margin:6px 0;font-size:13px;">春季施肥、驱虫、浇水。</p>
+            <span style="font-size:12px;color:var(--grey);">施肥 3.2kg · 浇水 28L</span>
+          </div>
+        </div>
+        <div class="modal-footer"><button type="button" id="historyClose">关闭</button></div>
+      </div>
+    </div>
+    <div class="link-note">
+      <a href="fruit-tree-detail-mobile.html">果树详情</a> ·
+      <a href="fruit-tree-my-orders-mobile.html">我的果树认植订单</a> ·
+      <a href="fruit-tree-my-trees-mobile.html">我的果树</a>
+    </div>
+  </main>
+  <script>
+    (function(){
+      var filterFarmer = document.getElementById('filterFarmer');
+      var filterStatus = document.getElementById('filterStatus');
+      var items = document.querySelectorAll('.list-item-box');
+      function applyFilter(){
+        var f = filterFarmer.value;
+        var s = filterStatus.value;
+        items.forEach(function(el){
+          var matchFarmer = !f || (el.getAttribute('data-farmer') || '').indexOf(f) !== -1;
+          var statusEl = el.querySelector('.status.green, .status.orange, .status.red');
+          var statusText = statusEl ? statusEl.textContent : '';
+          var matchStatus = !s || statusText.indexOf(s) !== -1;
+          el.style.display = matchFarmer && matchStatus ? '' : 'none';
+        });
+      }
+      filterFarmer.addEventListener('change', applyFilter);
+      filterStatus.addEventListener('change', applyFilter);
+      document.querySelectorAll('.btn-history').forEach(function(btn){
+        btn.onclick = function(){
+          var name = btn.getAttribute('data-name') || '果树';
+          document.getElementById('historyModalTitle').textContent = name + ' · 种植历史';
+          document.getElementById('overlayHistory').classList.add('show');
+        };
+      });
+      document.getElementById('historyClose').onclick = function(){ document.getElementById('overlayHistory').classList.remove('show'); };
+      document.getElementById('overlayHistory').onclick = function(e){ if(e.target === this) this.classList.remove('show'); };
+    })();
+  </script>
+</body>
+</html>

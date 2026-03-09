@@ -98,7 +98,10 @@
       box-sizing: border-box;
     }
     .field textarea { min-height: 80px; resize: vertical; }
-    .field .hint { font-size: 12px; color: var(--grey); margin-top: 6px; }
+    .radio-group { display: flex; gap: 16px; margin-top: 8px; }
+    .radio-group label { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--dark); cursor: pointer; }
+    .radio-group input { width: auto; margin: 0; }
+    .pay-desc { padding: 12px 14px; border-radius: 12px; background: #f0f9f4; font-size: 12px; color: var(--primary-deep); line-height: 1.6; margin-bottom: 16px; }
     .total-row {
       display: flex;
       justify-content: space-between;
@@ -171,8 +174,13 @@
     .modal h3 { margin: 0 0 8px; font-size: 17px; }
     .modal p { margin: 0 0 20px; font-size: 13px; color: var(--grey); }
     .modal .btn { width: 100%; height: 44px; border: none; border-radius: 22px; background: var(--primary); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; }
-    .toast { position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%); padding: 12px 20px; background: rgba(0,0,0,0.75); color: #fff; border-radius: 24px; font-size: 14px; z-index: 300; display: none; }
-    .toast.show { display: block; }
+    .pay-type { display: flex; gap: 12px; margin-bottom: 16px; }
+    .pay-type label { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+    .pay-type input { width: 18px; height: 18px; }
+    .block-offline { display: block; }
+    .block-online { display: none; }
+    .block-online.show { display: block; }
+    .block-offline.hide { display: none; }
   </style>
 </head>
 <body>
@@ -183,20 +191,31 @@
     </div>
 
     <div class="notice">
-      请先与商户线下完成交易，再上传付款凭证并填写实际付款金额，提交后等待管理员审核。
+      支持<strong>线上支付</strong>（微信支付，款项直达农户）或<strong>线下交易</strong>（上传凭证等待审核）。请先选择交易方式。
     </div>
 
     <div class="tree-card">
       <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=400&q=80" alt="翠冠梨树" />
       <div>
         <h2>翠冠梨树</h2>
-        <div class="code">编号 B-01-08 · 南一区 8 号垄</div>
+        <div class="code">编号 B-01-08 · 南一区 8 号垄 · 所属农户：南园 李农户</div>
         <div class="price">认植年价 ¥199/年</div>
       </div>
     </div>
 
     <div class="form-card">
       <h3>认植信息</h3>
+      <div class="field">
+        <label>交易方式</label>
+        <div class="pay-type">
+          <label><input type="radio" name="payMode" value="online" id="payOnline" /> 线上交易（微信支付，直达农户）</label>
+          <label><input type="radio" name="payMode" value="offline" id="payOffline" checked /> 线下交易（上传凭证，等待审核）</label>
+        </div>
+      </div>
+      <div class="field block-online" id="blockOnline">
+        <label>支付说明</label>
+        <div class="hint">提交后将调起微信支付，款项将直接进入该果树所属农户账户。</div>
+      </div>
       <div class="field">
         <label>认植期限</label>
         <select id="durationSelect">
@@ -210,11 +229,19 @@
         <strong id="totalAmount">¥ 398</strong>
       </div>
       <div class="field">
+        <label>姓名<span style="color:#e95f5f">*</span></label>
+        <input type="text" placeholder="请输入真实姓名" value="" />
+      </div>
+      <div class="field">
+        <label>手机号<span style="color:#e95f5f">*</span></label>
+        <input type="tel" placeholder="请输入手机号" value="" />
+      </div>
+      <div class="field block-offline" id="blockOffline">
         <label>实际付款金额（元）<span style="color:#e95f5f">*</span></label>
         <input type="number" placeholder="请填写您线下实际支付的金额" value="" />
         <div class="hint">供管理员对照付款凭证审核</div>
       </div>
-      <div class="field">
+      <div class="field block-offline" id="blockOffline2">
         <label>付款凭证（截图）<span style="color:#e95f5f">*</span></label>
         <div class="upload-zone" id="uploadZone" style="cursor:pointer;">
           <div class="plus">+</div>
@@ -235,9 +262,9 @@
     <div class="overlay" id="successOverlay">
       <div class="modal">
         <div class="icon-ok">✓</div>
-        <h3>提交成功</h3>
-        <p>请等待管理员审核，审核结果将通过消息通知您</p>
-        <a href="fruit-tree-my-orders-mobile.html" class="btn">去我的果树认植订单</a>
+        <h3 id="successTitle">提交成功</h3>
+        <p id="successDesc">请等待管理员审核，审核结果将通过消息通知您</p>
+        <a href="fruit-tree-my-orders-mobile.html" class="btn" id="successBtn">去我的果树认植订单</a>
       </div>
     </div>
     <div class="toast" id="toast"></div>
@@ -257,8 +284,29 @@
       function updateTotal(){ totalAmount.textContent = '¥ ' + durationSelect.value; }
       durationSelect.addEventListener('change', updateTotal);
       function showToast(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(function(){ toast.classList.remove('show'); }, 2000); }
+      var payOffline = document.getElementById('payOffline');
+      var blockOnline = document.getElementById('blockOnline');
+      var blockOffline = document.getElementById('blockOffline');
+      var blockOffline2 = document.getElementById('blockOffline2');
+      var successTitle = document.getElementById('successTitle');
+      var successDesc = document.getElementById('successDesc');
+      var successBtn = document.getElementById('successBtn');
+      function toggleMode(){
+        var isOnline = document.getElementById('payOnline').checked;
+        blockOnline.classList.toggle('show', isOnline);
+        blockOffline.classList.toggle('hide', isOnline);
+        blockOffline2.classList.toggle('hide', isOnline);
+        btnSubmit.textContent = isOnline ? '去支付' : '提交审核';
+      }
+      payOffline.addEventListener('change', toggleMode);
+      document.getElementById('payOnline').addEventListener('change', toggleMode);
       uploadZone.onclick = function(){ showToast('原型演示：正式环境可上传图片'); };
-      btnSubmit.onclick = function(){ successOverlay.classList.add('show'); };
+      btnSubmit.onclick = function(){
+        var isOnline = document.getElementById('payOnline').checked;
+        successOverlay.classList.add('show');
+        if(isOnline){ successTitle.textContent = '即将调起微信支付'; successDesc.textContent = '支付成功后款项将直达农户，您可在「我的果树认植订单」查看。'; successBtn.textContent = '去支付（原型演示）'; }
+        else { successTitle.textContent = '提交成功'; successDesc.textContent = '请等待管理员审核，审核结果将通过消息通知您'; successBtn.textContent = '去我的果树认植订单'; successBtn.href = 'fruit-tree-my-orders-mobile.html'; }
+      };
       successOverlay.onclick = function(e){ if(e.target === successOverlay) successOverlay.classList.remove('show'); };
     })();
   </script>

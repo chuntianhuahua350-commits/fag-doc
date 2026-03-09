@@ -130,12 +130,13 @@
 <body>
   <main class="page">
     <div class="nav">
-      <a href="fruit-tree-prototype-index.html" class="back" style="text-decoration:none;color:inherit;">&#x2039;</a>
+      <a href="index.html" class="back" style="text-decoration:none;color:inherit;">&#x2039;</a>
       果树认植审核
     </div>
 
     <div class="tabs" id="tabs">
       <span class="active" data-tab="pending">待审核</span>
+      <span data-tab="paid">已支付</span>
       <span data-tab="passed">已通过</span>
       <span data-tab="rejected">已拒绝</span>
     </div>
@@ -147,8 +148,8 @@
           <span class="status-tag pending">待审核</span>
         </div>
         <div class="tree-name">翠冠梨树</div>
-        <div class="tree-meta">编号 B-01-08 · 认植 2 年 · 应付 ¥398 · 实际付款 ¥398</div>
-        <div class="tree-meta">用户 张** · 提交时间 2026-03-08 14:32</div>
+        <div class="tree-meta">编号 B-01-08 · 认植 2 年 · 应付 ¥398 · 实际付款 ¥398 · <strong>线下</strong></div>
+        <div class="tree-meta">用户 张** 138****0001 · 农户 南园 李农户 139****0002</div>
         <div class="list-item-actions">
           <button class="mini-btn btn-detail" type="button" data-order="FT202603080001" data-tree="翠冠梨树" data-meta="编号 B-01-08 · 认植 2 年 · 应付 ¥398 · 实际付款 ¥398 · 用户 张** · 2026-03-08 14:32">查看详情</button>
           <button class="mini-btn-primary btn-approve" type="button" data-tree="翠冠梨树">通过</button>
@@ -162,8 +163,8 @@
           <span class="status-tag pending">待审核</span>
         </div>
         <div class="tree-name">阳光玫瑰葡萄树</div>
-        <div class="tree-meta">编号 C-05-21 · 认植 1 年 · 应付 ¥399 · 实际付款 ¥399</div>
-        <div class="tree-meta">用户 李** · 提交时间 2026-03-07 10:15</div>
+        <div class="tree-meta">编号 C-05-21 · 认植 1 年 · 应付 ¥399 · 实际付款 ¥399 · <strong>线下</strong></div>
+        <div class="tree-meta">用户 李** 137****0003 · 农户 北区葡萄园 王师傅 136****0004 · 2026-03-07 10:15</div>
         <div class="list-item-actions">
           <button class="mini-btn btn-detail" type="button" data-order="FT202603070002" data-tree="阳光玫瑰葡萄树" data-meta="编号 C-05-21 · 认植 1 年 · 应付 ¥399 · 实际付款 ¥399 · 用户 李** · 2026-03-07 10:15">查看详情</button>
           <button class="mini-btn-primary btn-approve" type="button" data-tree="阳光玫瑰葡萄树">通过</button>
@@ -177,7 +178,8 @@
           <span class="status-tag passed">已通过</span>
         </div>
         <div class="tree-name">红富士苹果树</div>
-        <div class="tree-meta">编号 A-03-12 · 认植 3 年 · 审核时间 2026-03-06 09:00</div>
+        <div class="tree-meta">编号 A-03-12 · 认植 3 年 · <strong>线上支付</strong> · 审核时间 2026-03-06 09:00</div>
+        <div class="tree-meta">用户 王** 135****0005 · 农户 东区果园 张师傅</div>
         <div class="list-item-actions">
           <button class="mini-btn btn-detail" type="button" data-order="FT202603050003" data-tree="红富士苹果树" data-meta="编号 A-03-12 · 认植 3 年 · 已通过 · 审核时间 2026-03-06 09:00">查看详情</button>
         </div>
@@ -244,8 +246,11 @@
         btn.onclick = function(){
           detailBody.innerHTML = '<div class="row"><span class="label">订单号：</span>' + btn.getAttribute('data-order') + '</div>' +
             '<div class="row"><span class="label">果树：</span>' + btn.getAttribute('data-tree') + '</div>' +
+            '<div class="row"><span class="label">用户：</span>姓名、手机号（详情带出）</div>' +
+            '<div class="row"><span class="label">农户：</span>农户名称、联系人、联系电话</div>' +
+            '<div class="row"><span class="label">交易方式：</span>线上 / 线下</div>' +
             '<div class="row"><span class="label">信息：</span>' + (btn.getAttribute('data-meta') || '') + '</div>' +
-            '<div class="row">实际环境中可展示付款凭证大图、用户备注等</div>';
+            '<div class="row">实际环境中可展示付款凭证大图、支付单号、用户备注等</div>';
           overlayDetail.classList.add('show');
         };
       });
